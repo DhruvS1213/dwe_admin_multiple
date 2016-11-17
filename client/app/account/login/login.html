@@ -1,0 +1,65 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <!-- <div class="col-sm-12">
+      <h1>Login</h1>
+      <p>Accounts are reset on server restart from <code>server/config/seed.js</code>. Default account is <code>test@test.com</code> / <code>test</code></p>
+      <p>Admin account is <code>admin@admin.com</code> / <code>admin</code></p>
+    </div> -->
+    <div class="col-sm-12 login-div">
+      <form class="form" name="form" ng-submit="login(form)" novalidate>
+
+        <div >
+          <label class="label-text">Username</label>
+          <br>
+          <input type="email" name="email" class="text-line" ng-model="user.email" required>
+
+        </div>
+
+        <div class="form-group">
+          <label class="label-text">Password</label>
+          <br>
+          <input type="password" name="password" class="text-line" ng-model="user.password" required>
+         
+        </div>
+
+        <div class="form-group has-error">
+          <p class="help-block" ng-show="form.email.$error.required && form.password.$error.required && submitted">
+             Please enter your email and password.
+          </p>
+          <p class="help-block" ng-show="form.email.$error.email && submitted">
+             Please enter a valid email.
+          </p>
+
+          <p class="help-block">{{ errors.other }}</p>
+        </div>
+        <br>
+        <div>
+          <button  class="btn btn-inverse btn-lg btn-login button-style" type="submit">
+            Login
+          </button>
+    <!--       <a class="btn btn-default btn-lg btn-register" href="/signup">
+            Register
+          </a> -->
+        </div>
+
+     
+      <!--   <div>
+          <a class="btn btn-google-plus" href="" ng-click="loginOauth('google')">
+            <i class="fa fa-google-plus"></i> Connect with Google+
+          </a>
+        </div> -->
+      </form>
+    </div>
+  </div>
+
+
+    <div class="background-imgposition">
+      <img  src="assets/images/blue_triangle.png" />
+      <img class="logo-position" src="assets/images/erricson.png" />
+    </div>
+   
+
+</div>
+

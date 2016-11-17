@@ -1,0 +1,104 @@
+
+.btn-google-plus {
+  color: #fff;
+  background-color: #dd4b39;
+  border-color: #c53727;
+}
+
+.btn-github {
+  color: #fff;
+  background-color: #fafafa;
+  border-color: #ccc;
+}
+
+
+.triangle-bottomright {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-bottom: 600px solid #193066;
+    border-left: 700px solid transparent;
+    bottom: 0px;
+    left: 900px;
+    z-index: -1;
+
+}
+
+input[type=email] {
+    color: #2a2a2a;
+    border: none;
+    font-size: 24px;
+
+}
+
+input[type=password] {
+    color: #2a2a2a;
+    border: none;
+    font-size: 24px;
+
+}
+
+.text-line {
+        background-color: transparent;
+        color: black;
+        outline: none;
+        outline-style: none;
+        outline-offset: 0;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-bottom: solid #c6c6c6 1px !important;
+        padding: 3px 10px 3px 3px;
+        margin-bottom: 10px;
+        width: 100%;
+    	max-width: 480px;
+
+ }
+
+
+ .label-text{
+ 		font-family: arial,verdana,sans-serif,clean;
+ 		font-size: 18px;
+ 		color:#7e7e7e;
+ 		width: 100%;
+
+
+ }
+
+ .button-style{
+	color: white;
+    background-color: #002661;
+    max-width: 516px;
+    height: 70px;
+    font-size: 30px;
+    width: 100%
+ }
+
+
+ .login-div{
+
+ 	margin-top: 50px;
+    margin-left: 40px;
+ }
+
+ .btn:hover, .btn:focus {
+    color: white;
+    text-decoration: none;
+}
+
+.background-imgposition{
+   
+    position: relative;
+    margin-bottom: -225px;
+    margin-left: 675px;
+    top: -216px;
+    z-index: -3;
+}
+
+.logo-position {
+    height: 80px;
+    width: 220px;
+    position: absolute;
+    top: 400px;
+    left: 270px;
+}

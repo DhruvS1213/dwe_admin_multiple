@@ -1,0 +1,134 @@
+.thing-form {
+    margin: 20px 0;
+}
+
+#banner {
+    border-bottom: none;
+    margin-top: -20px;
+}
+
+#banner h1 {
+    font-size: 60px;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.hero-unit {
+    position: relative;
+    padding: 30px 15px;
+    color: #F5F5F5;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    background: #193066
+}
+
+.footer {
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 70px;
+    border-top: 1px solid #E5E5E5;
+}
+
+#colorstrip{
+    width: 100%; height: 50px;
+    
+    background-color: #06548A;
+}
+
+.acc-button {
+    width: 100%;
+    background-color: #193066;
+    text-align: left;
+    border: 0;
+}
+
+.accordian-panel {
+	padding: 8px;
+}
+
+ul {
+	list-style: none;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.headingpart{
+
+	/*border: solid;
+	border-color: black;
+	border-width:1px;
+	border-radius: 4px; */
+	padding:8px;
+}
+
+.accordian-block{
+
+	font-size: 16px;
+    background-color: #193066;
+    color: white;
+	height:40px;
+
+}
+
+.textpart{
+
+	/*border: solid;
+	border-color: black;
+	border-width:1px;
+	border-radius: 4px; */
+	padding:8px;
+}
+
+.img-content{    
+    width: 100px; /*328 co je 1/3 - 20margin left*/
+    height: 100px;
+    display:inline-block;
+    position:relative;
+}
+
+.img-content button{ 
+	position:absolute;
+	/*width: 10px;
+	height: 10px;*/
+    top:5px;
+    right:5px;
+}
+
+.imagepart{
+
+	/*border: solid;
+	border-color: black;
+	border-width:1px;
+	border-radius: 4px; */
+	padding:8px;
+}
+
+.videopart{
+/*
+	border: solid;
+	border-color: black;
+	border-width:1px;
+	border-radius: 4px; */
+	padding:8px;
+}
+
+.progcss{
+	margin-left: 5px;
+}
+
+#footstrip{
+    width: 100%; height: 30px;
+    
+    background-color: #06548A;
+}
+
+.footertext{
+	text-align: center;
+	padding: 2px;
+	color: white;
+}
+
+.progbar{
+	width:650px;
+	height: 22px;
+}
