@@ -1,4 +1,4 @@
-# dwe_admin
+# dwe_admin_multiple
 DEMO CMS ADMIN PART
 
 PRE-REQUISITES
