@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ContentSchema = new Schema({
+  demoId: Number,
   title: String,
   textContent: String,
   videoContent: String,

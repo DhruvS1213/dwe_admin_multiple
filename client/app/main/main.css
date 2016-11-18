@@ -42,6 +42,18 @@
     border: 0;
 }
 
+.add-button{
+	text-align: center;
+}
+
+.submit-button{
+	text-align: center;
+}
+
+.selection-panel{
+	text-align: center;
+}
+
 .accordian-panel {
 	padding: 8px;
 }

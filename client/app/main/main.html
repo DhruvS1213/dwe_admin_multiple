@@ -8,157 +8,173 @@
   </div>
 </header>
   <div ng-controller="MainCtrl as up">
-
-    <select ng-model="up.selectedDemo" ng-options="demo for demo in up.demos"></select>
-    <button ng-click="up.addNewBlog()"> Add New Blog </button>
-
+    
+    
     <br />
     <br />
-    <ul>
-        <button class="acc-button"><div class="accordian-block accordian-panel"><li ng-click="up.accordianFunction(1)"> Enter Heading</li></div> </button>
-            <div class="headingpart" ng-show="up.showHeading">
-                <div>
-                    <!--<label>Enter Heading </label>-->
-                    <textarea ng-model="up.title" name="blogTitle"></textarea>
-                    <script>
-                        CKEDITOR.plugins.addExternal( 'colorbutton', '/plugins/colorbutton/', 'plugin.js' );
-                        CKEDITOR.plugins.addExternal( 'panelbutton', '/plugins/panelbutton/', 'plugin.js' );
-                        CKEDITOR.plugins.addExternal( 'language', '/plugins/language/', 'plugin.js' );
-                        CKEDITOR.config.colorButton_colors = '000000,B1B3B4,7B0663,E32119,F08A00,89BA17,00625F,00A9D4,FABb00';
-                        CKEDITOR.config.colorButton_foreStyle = {
-                            element: 'span',
-                            styles: { color: '#(color)' }
-                        };
-                        CKEDITOR.replace( 'blogTitle',
-                        {
-                            extraPlugins: 'colorbutton',
-                            extraPlugins: 'panelbutton',
-                            extraPlugins: 'language',
-                            toolbar : 
-                            [
-                                { name: 'basicstyles', items : [ 'Bold','Italic' ] },
-                                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
-                                { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ]},
-                                { name: 'colors', items: [ 'TextColor', 'BGColor' ] }
-                            ]
-                        });
+    <div class="add-button">
+        <button ng-click="up.addNewBlog()"> Add New Blog </button>
+    </div>
+    <br />
 
-                        
+    <div class="selection-panel" ng-if="up.showSelectionDiv">
+        <select ng-change = "up.selectOption()" ng-model="up.selectedDemo" ng-options="demo as ('Demo :' + demo.demoId) for demo in up.contents"></select>
+    </div>
 
-                    </script>
+    <div ng-if="up.showContentDiv">
+        
+        <br />
+        <br />
+        <ul>
+            <button class="acc-button"><div class="accordian-block accordian-panel"><li ng-click="up.accordianFunction(1)"> Enter Heading</li></div> </button>
+                <div class="headingpart" ng-show="up.showHeading">
+                    <div>
+                        <!--<label>Enter Heading </label>-->
+                        <textarea ng-model="up.title" name="blogTitle"></textarea>
+                        <script>
+                            CKEDITOR.plugins.addExternal( 'colorbutton', '/plugins/colorbutton/', 'plugin.js' );
+                            CKEDITOR.plugins.addExternal( 'panelbutton', '/plugins/panelbutton/', 'plugin.js' );
+                            CKEDITOR.plugins.addExternal( 'language', '/plugins/language/', 'plugin.js' );
+                            CKEDITOR.config.colorButton_colors = '000000,B1B3B4,7B0663,E32119,F08A00,89BA17,00625F,00A9D4,FABb00';
+                            CKEDITOR.config.colorButton_foreStyle = {
+                                element: 'span',
+                                styles: { color: '#(color)' }
+                            };
+                            CKEDITOR.replace( 'blogTitle',
+                            {
+                                extraPlugins: 'colorbutton',
+                                extraPlugins: 'panelbutton',
+                                extraPlugins: 'language',
+                                toolbar : 
+                                [
+                                    { name: 'basicstyles', items : [ 'Bold','Italic' ] },
+                                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+                                    { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ]},
+                                    { name: 'colors', items: [ 'TextColor', 'BGColor' ] }
+                                ]
+                            });
+
+                            
+
+                        </script>
+                    </div>
+                    <br>
+                    <div>
+                        <button type = "button" class = "btn btn-primary" ng-click="up.uploadTitle(up.title)" >Change Heading</button>
+                    </div>
+                    
                 </div>
-                <br>
-                <div>
-                    <button type = "button" class = "btn btn-primary" ng-click="up.uploadTitle(up.title)" >Change Heading</button>
-                </div>
-            </div>
 
-    <br>
-    <br />
-    <br />
-        <button class="acc-button"><div class="accordian-block accordian-panel"> <li ng-click="up.accordianFunction(2)"> Enter Text Content </li> </div></button>
-            <div class="textpart" ng-show="up.showTextContent">
-                <div>
-                    <!--<label>Enter Textual Content</label>-->
-                    <textarea ng-model="up.data" name="blogData"></textarea>
-                    <script>
-                        CKEDITOR.replace( 'blogData' );
-                    </script>
+        <br>
+        <br />
+        <br />
+            <button class="acc-button"><div class="accordian-block accordian-panel"> <li ng-click="up.accordianFunction(2)"> Enter Text Content </li> </div></button>
+                <div class="textpart" ng-show="up.showTextContent">
+                    <div>
+                        <!--<label>Enter Textual Content</label>-->
+                        <textarea ng-model="up.data" name="blogData"></textarea>
+                        <script>
+                            CKEDITOR.replace( 'blogData' );
+                        </script>
+                    </div>
+                    <br>
+                    <div>
+                        <button type = "button" class = "btn btn-primary" ng-click="up.uploadData(up.data)" >Upload Text</button>
+                    </div>
                 </div>
-                <br>
-                <div>
-                    <button type = "button" class = "btn btn-primary" ng-click="up.uploadData(up.data)" >Upload Text</button>
-                </div>
-            </div>
 
-    <br>
-    <br />
-    <br />
-        <button class="acc-button"><div class="accordian-block accordian-panel"><li ng-click="up.accordianFunction(3)"> Upload Image </li></div></button>
-            <div class="imagepart" ng-show="up.showImagePart">
-                <div class="clearfix">
-                    <div class="col-md-4">
-                        <form name="up.upload_form">
-                                <label>Select Image</label>
+        <br>
+        <br />
+        <br />
+            <button class="acc-button"><div class="accordian-block accordian-panel"><li ng-click="up.accordianFunction(3)"> Upload Image </li></div></button>
+                <div class="imagepart" ng-show="up.showImagePart">
+                    <div class="clearfix">
+                        <div class="col-md-4">
+                            <form name="up.upload_form">
+                                    <label>Select Image</label>
+                                <input 
+                                    type="file" 
+                                    ngf-select 
+                                    ng-model="up.file" 
+                                    name="file" 
+                                    ngf-pattern="'image/*'"
+                                    accept="image/*" 
+                                    ngf-max-size="20MB" 
+                                    />
+                            <br>
+                            <div>
+                                <button type = "button" class = "btn btn-primary" ng-click="up.submit(1)" >Upload Image</button>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-8">
+                            <div ng-repeat="image in up.images track by $index">
+                                <br>
+                                <div class="img-content">
+                                    <img ng-src="{{image}}" height="100px" width="100px" />
+                                    <button type = "button" class = "btn btn-danger btn-transparent" ng-click="up.removeImage($index)"><span class="glyphicon glyphicon-remove"></span></button>
+                                    
+                                    
+                                </div>
+                                <textarea ng-model = "up.imgDescription[$index]"></textarea>
+                                <button ng-click="up.addDescription(up.imgDescription[$index], $index)">Upload Description</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                    <div class="col-md-8">
+                        <p>{{up.progressText1}}</p>
+                        <progress class="progbar" min="0" value="{{up.imUploadProgress}}" max="100" ></progress>
+                    </div>
+                    </div>
+                </div>
+                
+        <br>
+        <br />
+        <br />
+            <button class="acc-button"><div class="accordian-block accordian-panel"> <li ng-click="up.accordianFunction(4)"> Upload Video </li></div></button>
+                <div class="videopart" ng-show="up.showVideoPart">
+                    <div class="clearfix">
+                        <div class="col-md-4">
+                            <label>Select Video</label>
                             <input 
                                 type="file" 
                                 ngf-select 
                                 ng-model="up.file" 
                                 name="file" 
-                                ngf-pattern="'image/*'"
-                                accept="image/*" 
-                                ngf-max-size="20MB" 
-                                />
-                        <br>
-                        <div>
-                            <button type = "button" class = "btn btn-primary" ng-click="up.submit(1)" >Upload Image</button>
+                                ngf-pattern="'video/*'"
+                                accept="video/*"                     
+                            />
+                            <br>
+                            <div>
+                                <button type = "button" class = "btn btn-primary" ng-click="up.submit(2)" >Upload Video</button>
+                            </div>
                         </div>
+
+                        <div class="col-md-8">
+                            <div ng-repeat="videosrc in up.videoPath track by $index">
+                                <br>
+                                <div class="img-content">
+                                    <video ng-src="{{videosrc}}" height="100px" width="100px" />
+                                    <button ng-if="up.videoPath.length>0" type = "button" class = "btn btn-danger btn-transparent" ng-click="up.removeVideo($index)"><span class="glyphicon glyphicon-remove"></span></button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <p>{{up.progressText2}}</p>
+                        <progress class="progbar" min="0" value="{{up.vidUploadProgress}}" max="100" ></progress>
                         
-                    </div>
-                    <div class="col-md-8">
-                        <div ng-repeat="image in up.images track by $index">
-                            <br>
-                            <div class="img-content">
-                                <img ng-src="{{image}}" height="100px" width="100px" />
-                                <button type = "button" class = "btn btn-danger btn-transparent" ng-click="up.removeImage($index)"><span class="glyphicon glyphicon-remove"></span></button>
-                                
-                                
-                            </div>
-                            <textarea ng-model = "up.imgDescription[$index]"></textarea>
-                            <button ng-click="up.addDescription(up.imgDescription[$index], $index)">Upload Description</button>
-                        </div>
-                    </div>
+                    </div> 
                 </div>
+        </form>
 
-                <div class="clearfix">
-                <div class="col-md-8">
-                    <p>{{up.progressText1}}</p>
-                    <progress class="progbar" min="0" value="{{up.imUploadProgress}}" max="100" ></progress>
-                </div>
-                </div>
+        <br>
+        </ul>
+            <div class="submit-button">
+                <button ng-click="up.submitBlog()"> Submit </submit>
             </div>
-            
-    <br>
-    <br />
-    <br />
-        <button class="acc-button"><div class="accordian-block accordian-panel"> <li ng-click="up.accordianFunction(4)"> Upload Video </li></div></button>
-            <div class="videopart" ng-show="up.showVideoPart">
-                <div class="clearfix">
-                    <div class="col-md-4">
-                        <label>Select Video</label>
-                        <input 
-                            type="file" 
-                            ngf-select 
-                            ng-model="up.file" 
-                            name="file" 
-                            ngf-pattern="'video/*'"
-                            accept="video/*"                     
-                        />
-                        <br>
-                        <div>
-                            <button type = "button" class = "btn btn-primary" ng-click="up.submit(2)" >Upload Video</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-8">
-                        <div ng-repeat="videosrc in up.videoPath track by $index">
-                            <br>
-                            <div class="img-content">
-                                <video ng-src="{{videosrc}}" height="100px" width="100px" />
-                                <button ng-if="up.videoPath.length>0" type = "button" class = "btn btn-danger btn-transparent" ng-click="up.removeVideo($index)"><span class="glyphicon glyphicon-remove"></span></button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <p>{{up.progressText2}}</p>
-                    <progress class="progbar" min="0" value="{{up.vidUploadProgress}}" max="100" ></progress>
-                    
-                </div> 
-            </div>
-    </form>
-
-    <br>
-    </ul>
+    </div>
   </div>
 
 

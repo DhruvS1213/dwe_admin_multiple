@@ -20,8 +20,6 @@ exports.index = function(req, res) {
     if(err) { 
         return handleError(res, err); 
     }
-    console.log('******CONTENTS*******');
-    console.log(contents);
     return res.json(200, contents);
   });
 };
@@ -32,11 +30,14 @@ exports.showImage = function(req, res){
 
 // Get a single content
 exports.show = function(req, res) {
-  Content.findById(req.params.id, function (err, content) {
+  console.log('invoked');
+  //Content.findById(req.params.id, function (err, content) {
+  Content.findOne({demoId: req.params.demoId}, function(err, content){
     if(err) { return handleError(res, err); }
     if(!content) { return res.send(404); }
     return res.json(content);
   });
+  
 };
 
 // Creates a new content in the DB.
@@ -55,13 +56,7 @@ exports.update = function(req, res) {
   Content.findById(req.params.id, function (err, content) {
     if (err) { return handleError(res, err); }
     if(!content) { return res.send(404); }
-    console.log('request');
-    console.log(req.body);
-    console.log('content');
-    console.log(content);
     var updated = _.extend(content, req.body);
-    console.log('merged content');
-    console.log(updated);
     updated.save(function (err, updated_content) {
       if (err) { return handleError(res, err); }
       return res.json(200, updated_content);
@@ -70,7 +65,6 @@ exports.update = function(req, res) {
 };
 
 exports.uploadImage = function(req, res){
-    console.log('*** UPLOAD IMAGE FUNCTION ***');
     upload(req,res,function(err){
             if(err){
                  res.json({error_code:1,err_desc:err});
@@ -82,14 +76,12 @@ exports.uploadImage = function(req, res){
 
  var storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            console.log('filename', file.originalname);
             cb(null, './server/temp/');
         },
         filename: function (req, file, cb) {
             
             var extension = file.originalname.split('.')[file.originalname.split('.').length -1];
             if (extension == 'jpg' || extension == 'png' || extension == 'jpeg' || extension == 'bmp' || extension == 'tiff') {
-                console.log(' extension', extension);
                 cb(null, file.originalname);
                 
             }

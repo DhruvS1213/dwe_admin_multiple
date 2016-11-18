@@ -2,12 +2,10 @@
 
 angular.module('dweAdminApp')
   .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window) {
-    console.log(Auth.getCurrentUser().name);
-    
     console.log('admin-view');
-    getContents();
+    
     var vm = this;
-     vm.selectedBlogId = 0;
+    vm.selectedBlogId = 0;
     vm.contents = [];
     vm.images = [];
     vm.imgDescription = [];
@@ -15,8 +13,16 @@ angular.module('dweAdminApp')
     vm.accordion=1;
     vm.imgJSON = [];
     vm.demos = [];
-    // console.log(vm.imgJSON);
+    vm.selectedDemoContent = [];
+    vm.showContentDiv = false;
+    vm.showSelectionDiv = true;
+    var tempId;
     var flag=0;
+    var addOrUpdate = 0;       //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+    
+
+
+    getContents();
 
     var demourl = 'http://localhost:9000/server/temp/'
 
@@ -24,90 +30,142 @@ angular.module('dweAdminApp')
         return text ? String(text).replace(/<[^>]+>/gm, '') : '';
     }
 
+    
 
     function getContents(){
-       console.log('inside getcontents');
-      console.log('id', vm.selectedBlogId);
-      $http.get('/api/contents').success(function(contents) {
-      
-      //retrieving content titles
-      for (var i in contents){
-        if(contents[i].title === undefined){
-            console.log('No title given');
-        }
-        else{
-            console.log(htmlToPlaintext(contents[i].title));
-            vm.demos.push(htmlToPlaintext(contents[i].title));
-        }
-      }
+        console.log('inside getcontents');
+        $http.get('/api/contents').success(function(contents) {
+            
+            // if(contents.length === 0){
+            //     vm.showContentDiv = false;
+            //     vm.showSelectionDiv = false;
+            // }
+            // else{
+            //     vm.showContentDiv = false;
+            //     vm.showSelection = true;
+            // }
+            //retrieving content titles
 
-      vm.contents = contents;
-      console.log('vm.contents');
-      console.log(vm.contents);
+            console.log('adding content titles to selectbar');
+            
+            // for (var i in contents){
+            //     if(contents[i].title === undefined){
+            //         console.log('No title given');
+            //         vm.demos.push('No title added yet');
+            //     }
+            //     else{
+            //         console.log(htmlToPlaintext(contents[i].title));
+            //         vm.demos.push(htmlToPlaintext(contents[i].title));
+            //     }
+            // }
 
-      // Checking whether any entry exists in mongod
-      if(vm.contents.length != 0){
-        
-        // Checking whether title is added or not
-        if(vm.contents[0].title === undefined){
-          vm.title = '';
-        }
-        else{
-          vm.title = vm.contents[0].title;  
-        }
-        
-        //Checking whether text content is added or not
-        if(vm.contents[0].textContent === undefined){
-          vm.data = '';
-        }
-        else{
-          vm.data = vm.contents[0].textContent;  
-        }
-        
-        // Checking whether video content is added or not
-        if(vm.contents[0].videoContent == undefined || vm.contents[0].videoContent.length == 0){
-           vm.videoPath = [];
-        }
-        else{
-          var me = vm.contents[0].videoContent.split(",");
-          vm.videoPath= me;
-        }
+            console.log(vm.demos);
 
-        // Checking whether image content is added or not
-        if(vm.contents[0].imageDetail === undefined){
-          vm.images = [];
-          vm.imgDescription = [];
-        }
-        else{
-          vm.imgJSON = vm.contents[0].imageDetail;
-          for(var i in vm.contents[0].imageDetail){
-              vm.images[i] = vm.imgJSON[i].imagePath;
-              vm.imgDescription[i] = vm.imgJSON[i].imageDescription;
-          }
-        }
-      }
-   });
-}
+            vm.contents = contents;
+            console.log('vm.contents');
+            console.log(vm.contents);
+        });
+    }   
 
-    vm.addNewBlog = function(){
-        console.log(vm.title);
+    function refreshDom() {
         vm.title = '';
         CKEDITOR.instances.blogTitle.setData('');
         CKEDITOR.instances.blogData.setData('');
-        console.log(vm.title);
         vm.data = '';
         vm.images = [];
+        vm.imgJSON = [];
         vm.imgDescription = [];
         vm.videoPath = [];
+    }
+
+    vm.addNewBlog = function() {
+        refreshDom();
+        addOrUpdate = 0;    // Signifying that new content is being added
+        //getContents();
+        vm.showContentDiv = true;
+        vm.showSelectionDiv = false;
         
-        var tempId = vm.contents.length+1;
-         $http.post('/api/contents', {demoId: tempId}).success(function(res){
-                alert("ID for new blog created !!");
-        });
+        tempId = vm.contents.length + 1;
+
+    }
+
+    vm.selectOption = function() {
+        refreshDom();
+        console.log('selection changed ... ');
+        var index = vm.selectedDemo.demoId;
+        console.log(index);
+        //vm.selectedDemoContent = vm.selectedDemo;
+        //vm.selectedDemoId = vm.selectedDemo.demoId;
+        $http.get('/api/contents/'+index).success(function(content){
+            vm.selectedDemoContent = content;
+            vm.selectedDemoId = vm.selectedDemoContent.demoId;
+            console.log('selected demo content');
+            console.log(vm.selectedDemoContent);
+            console.log(vm.selectedDemoId);
+
+            vm.showContentDiv = true;
+            addOrUpdate = 1;
+            console.log('add or update status changed to ', addOrUpdate);
+            console.log('update mode on...')
+            // Checking whether title is added or not
+            if(vm.selectedDemoContent.title === undefined){
+                vm.title = '';
+                CKEDITOR.instances.blogTitle.setData('');
+            }
+            else{
+                console.log('here inside');
+                vm.title = vm.selectedDemoContent.title;
+                CKEDITOR.instances.blogTitle.setData(vm.title);
+                console.log(vm.title);  
+            }
+            
+            //Checking whether text content is added or not
+            if(vm.selectedDemoContent.textContent === undefined){
+                vm.data = '';
+                CKEDITOR.instances.blogData.setData('');
+            }
+            else{
+                vm.data = vm.selectedDemoContent.textContent;  
+                CKEDITOR.instances.blogData.setData(vm.data);
+            }
+            
+            // Checking whether video content is added or not
+            if(vm.selectedDemoContent.videoContent == undefined || vm.selectedDemoContent.videoContent.length == 0){
+                vm.videoPath = [];
+            }
+            else{
+                var me = vm.selectedDemoContent.videoContent.split(",");
+                vm.videoPath= me;
+            }
+
+            // Checking whether image content is added or not
+            if(vm.selectedDemoContent.imageDetail === undefined){
+                vm.images = [];
+                vm.imgDescription = [];
+            }
+            else{
+                vm.imgJSON = vm.selectedDemoContent.imageDetail;
+                for(var i in vm.selectedDemoContent.imageDetail){
+                    vm.images[i] = vm.imgJSON[i].imagePath;
+                    vm.imgDescription[i] = vm.imgJSON[i].imageDescription;
+                }
+            }
+       });
+    }
+
+
+    vm.submitBlog = function(){
+        getContents();
+        refreshDom();
+        vm.showSelectionDiv = true;
+        vm.selectOption();
+        //$window.location.reload();
+        //vm.showContentDiv = false;
     }
 
     vm.selected = function(){
         console.log(vm.selectedDemo);
+
     }
 
     vm.accordianFunction = function(id){
@@ -168,40 +226,58 @@ angular.module('dweAdminApp')
     vm.uploadTitle = function(head)
     {
        var blogTitle = CKEDITOR.instances.blogTitle.getData();
-       console.log(blogTitle);
-       
-       if(vm.contents.length == 0){
-         $http.post('/api/contents', {title: blogTitle}).success(function(res){
+       var blogData = CKEDITOR.instances.blogData.getData();
+       //console.log(blogTitle);
+       if(blogData === '' && vm.images.length === 0 && vm.videoPath.length === 0 && addOrUpdate === 0  ){
+         $http.post('/api/contents', {demoId: tempId, title: blogTitle}).success(function(res){
                 alert("Title Successfully Uploaded");
         });
          getContents();
        }
        
        else{
-          $http.put('/api/contents/' + vm.contents[0]._id, {title: blogTitle}).success(function(res){
+          if (addOrUpdate === 0) {
+              $http.put('/api/contents/' + vm.contents[tempId - 1]._id, {title: blogTitle}).success(function(res){
                   alert("Data Successfully Uploaded");
-          });
+              });
+          }
+          if (addOrUpdate === 1) {
+               $http.put('/api/contents/' + vm.selectedDemoContent._id, {title: blogTitle}).success(function(res){
+                  alert("Data Successfully Uploaded");
+               });
+          }
+          
         }  
     };
 
     vm.uploadData = function(head)
     {
+       var blogTitle = CKEDITOR.instances.blogTitle.getData();
        var blogData = CKEDITOR.instances.blogData.getData();
-       console.log(blogData);
-       if(vm.contents.length == 0){
-           $http.post('/api/contents', {textContent: blogData}).success(function(res){
+
+       //console.log(blogData);
+
+       if(blogTitle === '' && vm.images.length === 0 && vm.videoPath.length === 0 && addOrUpdate === 0 ){
+          
+           $http.post('/api/contents', {demoId: tempId, textContent: blogData}).success(function(res){
                 alert("Title Successfully Uploaded");
             }); 
-            getContents();
+            //getContents();
         }
-
-
-       else{
-          $http.put('/api/contents/' + vm.contents[0]._id, {textContent: blogData}).success(function(res){
-          alert("Data Successfully Uploaded");
-        });
-      }
-   
+        
+        else{
+            if( addOrUpdate === 0 ) {
+                $http.put('/api/contents/' + vm.contents[tempId - 1]._id, {textContent: blogData}).success(function(res){
+                    alert("Data Successfully Uploaded");
+                });
+            }
+            if( addOrUpdate === 1) {
+                $http.put('/api/contents/' + vm.selectedDemoContent._id, {textContent: blogData}).success(function(res){
+                alert("Data Successfully Uploaded");
+            });
+            } 
+            
+        }
     };
 
     vm.submit = function(contentType){
@@ -239,17 +315,31 @@ angular.module('dweAdminApp')
                     vm.imgJSON.push(temp);
                     console.log('upload function');
                     console.log(vm.imgJSON);
-
-                    if(vm.contents.length === 0){
-                        $http.post('/api/contents/', {imageDetail: vm.imgJSON}).success(function(res){
+                    var blogTitle = CKEDITOR.instances.blogTitle.getData();
+                    var blogData = CKEDITOR.instances.blogData.getData();
+                    if(blogTitle === '' && vm.blogData === '' && vm.videoPath.length === 0 && addOrUpdate === 0) {
+                        
+                        $http.post('/api/contents/', {demoId: tempId, imageDetail: vm.imgJSON}).success(function(res){
                              alert("Data Successfully Uploaded");
                         });
-                        getContents();
+                        //vm.imgJSON = [];
+                        //getContents();
                     }
+
                     else{
-                        $http.put('/api/contents/' + vm.contents[0]._id, {imageDetail: vm.imgJSON}).success(function(res){
-                             alert("Data Successfully Uploaded");
-                        });
+                        if( addOrUpdate === 0 ){
+                            $http.put('/api/contents/' + vm.contents[tempId-1]._id, {imageDetail: vm.imgJSON}).success(function(res){
+                                 alert("Data Successfully Uploaded");
+                            });
+                            //vm.imgJSON = [];
+                        }
+                        if( addOrUpdate === 1 ){
+                            $http.put('/api/contents/' + vm.selectedDemoContent._id, {imageDetail: vm.imgJSON}).success(function(res){
+                                alert("Data Successfully Uploaded");
+                            });
+                            //vm.imgJSON = [];
+                        }
+                        
 
                     }
 
@@ -266,7 +356,7 @@ angular.module('dweAdminApp')
                         // vm.images= my;
                         // console.log(vm.images);
                         console.log('mylogic',vm.imgJSON);
-                        vm.imgJSON = response.data[0].imageDetail;
+                        vm.imgJSON = response.data[vm.selectedDemoId].imageDetail;
                         console.log('mylogic2',vm.imgJSON);
                         for(var i in vm.imgJSON){
                              vm.images[i] = vm.imgJSON[i].imagePath;
@@ -277,7 +367,6 @@ angular.module('dweAdminApp')
                     {
                         console.log('error');
                     });
-                   
                     
                 } 
 
@@ -288,18 +377,31 @@ angular.module('dweAdminApp')
                     console.log(demourl + name);
                     vm.videoPath.push(demourl+name);
                     console.log(vm.videoPath);
-
-                    if(vm.contents.length === 0){
-                        $http.post('/api/contents/', {videoContent: vm.videoPath}).success(function(res){
+                    var blogTitle = CKEDITOR.instances.blogTitle.getData();
+                    var blogData = CKEDITOR.instances.blogData.getData();
+                    if(blogTitle === '' && blogData === '' && vm.images.length === 0 && addOrUpdate === 0){
+                        
+                        $http.post('/api/contents/', {demoId: tempId, videoContent: vm.videoPath}).success(function(res){
                              alert("Data Successfully Uploaded");
                         });
                         getContents();
                     }
                     else{
-                        $http.put('/api/contents/' + vm.contents[0]._id, {videoContent: vm.videoPath}).success(function(res){
+                        if( addOrUpdate === 0 ){
+                            $http.put('/api/contents/' + vm.contents[tempId - 1]._id, {videoContent: vm.videoPath}).success(function(res){
+                                alert("Data Successfully Uploaded");
+                            });
+                        }
+                        if ( addOrUpdate === 1 ){
+                            $http.put('/api/contents/' + vm.selectedDemoContent._id, {videoContent: vm.videoPath}).success(function(res){
                             alert("Data Successfully Uploaded");
-                        });   
-                    }   
+                        });
+                        }
+                           
+                    } 
+
+                    vm.vidUploadProgress = 0;
+                    vm.file = '';  
                      
                 }
             } 
@@ -330,130 +432,62 @@ angular.module('dweAdminApp')
 
 
 
+    vm.addDescription = function(description, index){
 
- vm.addDescription = function(description, index){
-        
-            $http({
-                    method: 'GET',
-                    url: 'http://localhost:9000/api/contents'
-                }).then(function successCallback(response)
-                    {
-                        console.log(response.data[0].imgDescription);
-                     
-                        vm.imgJSON= response.data[0].imageDetail;
-
-
-
-
-        console.log('index', index);
-        console.log('description', description)
-
-        console.log('id', vm.imgJSON[0].id);
-        //vm.imgDescription[index] = description;
-       //vm.imgDescription[index] = vm.images[index] + '.txt';
-     // var tempItem = {};
-       
-     
-     
-       
-            for(var i=0; i<vm.imgJSON.length; i++){
-                console.log('Searching if ID Exists');
-                flag=0;
-                console.log(vm.imgJSON[i].id);
-                if(vm.imgJSON[i].id == index)
-                {
-                    flag=1;
-                    console.log('i',i);
-                    console.log('id', index);
-                    console.log('ID Exists');
-                    vm.imgJSON[i].imageDescription = description;
-                    break;
-                }
+        vm.imgJSON= vm.selectedDemoContent.imageDetail;
+        for(var i=0; i<vm.imgJSON.length; i++) {
+            console.log('Searching if ID Exists');
+            flag=0;
+            console.log(vm.imgJSON[i].id);
+            if(vm.imgJSON[i].id == index)
+            {
+                flag=1;
+                console.log('i',i);
+                console.log('id', index);
+                console.log('ID Exists');
+                vm.imgJSON[i].imageDescription = description;
+                break;
             }
-           
-          //  vm.imgJSON[].imageDescription = description;
-
-                
-                
-                
-                // if(flag == 0 )
-                // {
-                //     console.log('flag', flag);
-                //     console.log('ID Not found. Creating new');
-                    
-                //     console.log('i',i);
-                //     console.log('id', index);
-                //     tempItem['id'] = index;
-                //     tempItem['imageDescription'] = description;
-                //     vm.imgJSON.push(tempItem);
-                // }
-            
-       
-    
-       console.log('json-length', vm.imgJSON);
-
-        
-        // console.log(vm.imgDescription);
-        // for (desc in vm.imgDescription){
-        //     console.log(desc + ':' + vm.imgDescription[desc]);
-        // }
-
-        // $http({
-        //     method: 'GET',
-        //     url: 'http://localhost:3000/uploadImageDescription?imgDescription=' + vm.imgDescription 
-        // });
-        //console.log('Descriptions', vm.desription);
-      
-
-                    $http.put('/api/contents/' + vm.contents[0]._id, {imageDetail: vm.imgJSON }).success(function(res){
-                         alert("Data Successfully Uploaded");
-                    });
-
-
-                       
-                    }, function errorCallback(error)
-                    {
-                        console.log('error');
-                    });
         }
-
-
-
- vm.removeImage = function(index){
-    console.log('image requrest to delete')
-    console.log(index);
-
-    vm.imgJSON.splice(index,1);
-    vm.images.splice(index,1);
-    vm.imgDescription.splice(index,1);
-    console.log(vm.imgJSON);
-    for(var i=index ;i<vm.imgJSON.length; i++){
-        vm.imgJSON[i].id  = vm.imgJSON[i].id - 1 ;
-        console.log(vm.imgJSON[i].id);
+        
+        console.log('json-length', vm.imgJSON);
+        
+        $http.put('/api/contents/' + vm.selectedDemoContent._id, {imageDetail: vm.imgJSON }).success(function(res){
+            alert("Data Successfully Uploaded");
+        });
     }
-         $http.put('/api/contents/' + vm.contents[0]._id, {imageDetail: vm.imgJSON }).success(function(res){
+
+
+
+    vm.removeImage = function(index){
+        console.log('image requrest to delete')
+        console.log(index);
+        vm.imgJSON= vm.selectedDemoContent.imageDetail;
+
+        vm.imgJSON.splice(index,1);
+        vm.images.splice(index,1);
+        vm.imgDescription.splice(index,1);
+        console.log(vm.imgJSON);
+        for(var i=index ;i<vm.imgJSON.length; i++){
+            vm.imgJSON[i].id  = vm.imgJSON[i].id - 1 ;
+            console.log(vm.imgJSON[i].id);
+        }
+        $http.put('/api/contents/' + vm.selectedDemoContent._id, {imageDetail: vm.imgJSON }).success(function(res){
             alert("Image DELETED Successfully");
-            
-         });
+        });
+    }
 
 
+    vm.removeVideo = function(index){
+        console.log('video delete request made');
+        console.log(index);
+        vm.videoPath = vm.selectedDemoContent.videoContent;
+        vm.videoPath.splice(index,1);
+        console.log(vm.videoPath)
 
- }
-
-
- vm.removeVideo = function(index){
-  console.log('video delete request made');
-  console.log(index);
-
-  vm.videoPath.splice(index,1);
-  console.log(vm.videoPath)
-
-  $http.put('/api/contents/' + vm.contents[0]._id, {videoContent: vm.videoPath }).success(function(res){
+        $http.put('/api/contents/' + vm.selectedDemoContent._id, {videoContent: vm.videoPath }).success(function(res){
             alert("Video DELETED Successfully");
-            
-         });
- }
-
-
+        });
+    }
 
 })
