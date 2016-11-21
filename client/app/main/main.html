@@ -12,16 +12,21 @@
     
     <br />
     <br />
-    <div class="add-button">
-        <button ng-click="up.addNewBlog()"> Add New Blog </button>
+    <div ng-if = "up.contents.length === 0" class="add-btn">
+        <button class = "btn btn-success btn-lg" ng-click="up.addNewBlog()"> + Add Blog </button>
     </div>
     <br />
+
+    <div ng-if = "up.contents.length > 0">
+        <button class = "btn btn-success btn-lg add-new-btn" ng-click="up.addNewBlog()"> + Add New Blog </button>
+    </div>
 
     <div class="selection-panel" ng-if="up.showSelectionDiv">
         <select ng-change = "up.selectOption()" ng-model="up.selectedDemo" ng-options="demo as ('Demo :' + demo.demoId) for demo in up.contents"></select>
     </div>
 
-    <div ng-if="up.showContentDiv">
+    
+    <div class = "content-border-div" ng-if="up.showContentDiv">
         
         <br />
         <br />
@@ -172,7 +177,7 @@
         <br>
         </ul>
             <div class="submit-button">
-                <button ng-click="up.submitBlog()"> Submit </submit>
+                <button ng-click="up.submitBlog()"> Submit </button>
             </div>
     </div>
   </div>
@@ -181,8 +186,6 @@
 
 <footer class="footer">
   <div class="container">
-      <p>Angular Fullstack v2.0.13 |
-        <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
-         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
+     
   </div>
 </footer>

@@ -42,8 +42,15 @@
     border: 0;
 }
 
-.add-button{
+.add-btn{
 	text-align: center;
+}
+
+.add-new-btn {
+	top: -35px;
+    position: relative;
+    float: right;
+    right: 100px;
 }
 
 .submit-button{
@@ -71,6 +78,15 @@ ul {
 	border-width:1px;
 	border-radius: 4px; */
 	padding:8px;
+}
+
+.content-border-div {
+	border-style : dotted;
+	border-width: 1px;
+	position: relative;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 50px;
 }
 
 .accordian-block{

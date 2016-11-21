@@ -232,7 +232,7 @@ angular.module('dweAdminApp')
          $http.post('/api/contents', {demoId: tempId, title: blogTitle}).success(function(res){
                 alert("Title Successfully Uploaded");
         });
-         getContents();
+         //getContents();
        }
        
        else{
@@ -384,7 +384,7 @@ angular.module('dweAdminApp')
                         $http.post('/api/contents/', {demoId: tempId, videoContent: vm.videoPath}).success(function(res){
                              alert("Data Successfully Uploaded");
                         });
-                        getContents();
+                        //getContents();
                     }
                     else{
                         if( addOrUpdate === 0 ){
