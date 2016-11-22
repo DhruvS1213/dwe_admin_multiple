@@ -18,9 +18,18 @@ angular.module('dweAdminApp')
     vm.showSelectionDiv = true;
     var tempId;
     var flag=0;
-    var addOrUpdate = 0;       //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+    var addOrUpdate = 0;
+      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
     
 
+angular.element(document).ready(function () {
+
+    console.log('On Page Refresh');
+    CKEDITOR.instances.blogTitle.removeAllListeners();
+    CKEDITOR.instances.blogData.removeAllListeners();
+
+
+});
 
     getContents();
 
@@ -30,7 +39,6 @@ angular.module('dweAdminApp')
         return text ? String(text).replace(/<[^>]+>/gm, '') : '';
     }
 
-    
 
     function getContents(){
         console.log('inside getcontents');
@@ -59,9 +67,9 @@ angular.module('dweAdminApp')
             //     }
             // }
 
-            console.log(vm.demos);
-
+            console.log(vm.demos);      
             vm.contents = contents;
+
             console.log('vm.contents');
             console.log(vm.contents);
         });
@@ -167,6 +175,9 @@ angular.module('dweAdminApp')
         console.log(vm.selectedDemo);
 
     }
+
+
+
 
     vm.accordianFunction = function(id){
         if(id == 1)
