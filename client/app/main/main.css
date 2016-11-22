@@ -47,14 +47,16 @@
 }
 
 .add-new-btn {
-	top: -35px;
+	
     position: relative;
     float: right;
-    right: 100px;
+    right: 80px;
 }
 
 .submit-button{
 	text-align: center;
+	padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 .selection-panel-div {
@@ -168,3 +170,14 @@ ul {
 	width:650px;
 	height: 22px;
 }
+
+
+.button-style{
+        color: white;
+        background-color: #002661;
+        font-size: 18px;
+        width: 150px;
+        height: 45px;
+        border: none;
+        border-radius: 4px;
+    }
