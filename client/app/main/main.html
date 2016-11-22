@@ -32,7 +32,7 @@
         <br />
         <br />
         <ul>
-            <button class="acc-button"><div class="accordian-block accordian-panel"><li ng-click="up.accordianFunction(1)"> Enter Heading</li></div> </button>
+            <button class="acc-button" ng-click="up.accordianFunction(1)"><div class="accordian-block accordian-panel"><li > Enter Heading</li></div> </button>
                 <div class="headingpart" ng-show="up.showHeading">
                     <div>
                         <!--<label>Enter Heading </label>-->
@@ -74,7 +74,7 @@
         <br>
         <br />
         <br />
-            <button class="acc-button"><div class="accordian-block accordian-panel"> <li ng-click="up.accordianFunction(2)"> Enter Text Content </li> </div></button>
+            <button class="acc-button" ng-click="up.accordianFunction(2)"><div class="accordian-block accordian-panel"> <li > Enter Text Content </li> </div></button>
                 <div class="textpart" ng-show="up.showTextContent">
                     <div>
                         <!--<label>Enter Textual Content</label>-->
@@ -92,7 +92,7 @@
         <br>
         <br />
         <br />
-            <button class="acc-button"><div class="accordian-block accordian-panel"><li ng-click="up.accordianFunction(3)"> Upload Image </li></div></button>
+            <button class="acc-button" ng-click="up.accordianFunction(3)"><div class="accordian-block accordian-panel"><li > Upload Image </li></div></button>
                 <div class="imagepart" ng-show="up.showImagePart">
                     <div class="clearfix">
                         <div class="col-md-4">
@@ -139,7 +139,7 @@
         <br>
         <br />
         <br />
-            <button class="acc-button"><div class="accordian-block accordian-panel"> <li ng-click="up.accordianFunction(4)"> Upload Video </li></div></button>
+            <button class="acc-button" ng-click="up.accordianFunction(4)"><div class="accordian-block accordian-panel"> <li > Upload Video </li></div></button>
                 <div class="videopart" ng-show="up.showVideoPart">
                     <div class="clearfix">
                         <div class="col-md-4">
@@ -169,8 +169,7 @@
 
                         </div>
                         <p>{{up.progressText2}}</p>
-                        <progress class="progbar" min="0" value="{{up.vidUploadProgress}}" max="100" ></progress>
-                        
+                        <progress class="progbar" min="0" value="{{up.vidUploadProgress}}" max="100" ></progress>     
                     </div> 
                 </div>
         </form>
