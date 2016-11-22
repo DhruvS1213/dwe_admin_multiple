@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dweAdminApp')
-  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window) {
+  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig) {
     console.log('admin-view');
     
     var vm = this;
@@ -38,7 +38,8 @@ angular.element(document).ready(function () {
 
     getContents();
 
-    var demourl = 'http://localhost:9000/server/temp/'
+    var demourl = appConfig.url + '/server/temp/'
+    console.log('demoURL test', demourl);
 
     vm.htmlToPlaintext = function(text) {
         return text ? String(text).replace(/<[^>]+>/gm, '') : '';
@@ -366,7 +367,7 @@ angular.element(document).ready(function () {
                      
                 $http({
                     method: 'GET',
-                    url: 'http://localhost:9000/api/contents'
+                    url: appConfig.url + '/api/contents'
                 }).then(function successCallback(response)
                     {
                         // console.log(response.data[0].imageContent);
