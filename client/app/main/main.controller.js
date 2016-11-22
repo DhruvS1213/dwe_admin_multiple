@@ -18,7 +18,8 @@ angular.module('dweAdminApp')
     vm.showSelectionDiv = true;
     var tempId;
     var flag=0;
-    var addOrUpdate = 0;       //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+    var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+    
     
 
 
@@ -26,7 +27,7 @@ angular.module('dweAdminApp')
 
     var demourl = 'http://localhost:9000/server/temp/'
 
-    function htmlToPlaintext(text) {
+    vm.htmlToPlaintext = function(text) {
         return text ? String(text).replace(/<[^>]+>/gm, '') : '';
     }
 
@@ -35,30 +36,7 @@ angular.module('dweAdminApp')
     function getContents(){
         console.log('inside getcontents');
         $http.get('/api/contents').success(function(contents) {
-            
-            // if(contents.length === 0){
-            //     vm.showContentDiv = false;
-            //     vm.showSelectionDiv = false;
-            // }
-            // else{
-            //     vm.showContentDiv = false;
-            //     vm.showSelection = true;
-            // }
-            //retrieving content titles
-
             console.log('adding content titles to selectbar');
-            
-            // for (var i in contents){
-            //     if(contents[i].title === undefined){
-            //         console.log('No title given');
-            //         vm.demos.push('No title added yet');
-            //     }
-            //     else{
-            //         console.log(htmlToPlaintext(contents[i].title));
-            //         vm.demos.push(htmlToPlaintext(contents[i].title));
-            //     }
-            // }
-
             console.log(vm.demos);
 
             vm.contents = contents;
@@ -91,8 +69,17 @@ angular.module('dweAdminApp')
 
     vm.selectOption = function() {
         refreshDom();
+        //vm.showContentDiv = true;
         console.log('selection changed ... ');
-        var index = vm.selectedDemo.demoId;
+        if(vm.selectedDemo === null){
+            console.log('No Demo Selected');
+            vm.selectedDemo = 0;
+            var index = 1;
+        }
+        else{
+            var index = vm.selectedDemo.demoId;
+        }
+        
         console.log(index);
         //vm.selectedDemoContent = vm.selectedDemo;
         //vm.selectedDemoId = vm.selectedDemo.demoId;
@@ -155,9 +142,10 @@ angular.module('dweAdminApp')
 
 
     vm.submitBlog = function(){
-        getContents();
         refreshDom();
+        getContents();        
         vm.showSelectionDiv = true;
+        //vm.showContentDiv = false;
         vm.selectOption();
         //$window.location.reload();
         //vm.showContentDiv = false;

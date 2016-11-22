@@ -21,8 +21,9 @@
         <button class = "btn btn-success btn-lg add-new-btn" ng-click="up.addNewBlog()"> + Add New Blog </button>
     </div>
 
-    <div class="selection-panel" ng-if="up.showSelectionDiv">
-        <select ng-change = "up.selectOption()" ng-model="up.selectedDemo" ng-options="demo as ('Demo :' + demo.demoId) for demo in up.contents"></select>
+    <div class="selection-panel-div" ng-if="up.showSelectionDiv">
+        <select class = "selection-panel" ng-change = "up.selectOption()" ng-model="up.selectedDemo" ng-options="demo as (up.htmlToPlaintext(demo.title)) for demo in up.contents">
+        </select>        
     </div>
 
     
