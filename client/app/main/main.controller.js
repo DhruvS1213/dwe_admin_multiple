@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dweAdminApp')
-  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig) {
+  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService) {
     console.log('admin-view');
     
     var vm = this;
@@ -25,7 +25,12 @@ angular.module('dweAdminApp')
     var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
     
 
-    
+console.log('testing httpSERvice');   
+//console.log(httpService);    
+ httpService.getData(function(data){
+     console.log(data);
+ });
+            
 
 angular.element(document).ready(function () {
 
