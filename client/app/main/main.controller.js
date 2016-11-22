@@ -18,8 +18,13 @@ angular.module('dweAdminApp')
     vm.showSelectionDiv = true;
     var tempId;
     var flag=0;
+<<<<<<< HEAD
     var addOrUpdate = 0;
       //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+=======
+    var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+    
+>>>>>>> 27aa3c1a78608f7b3943022a287a25c87553450c
     
 
 angular.element(document).ready(function () {
@@ -35,7 +40,7 @@ angular.element(document).ready(function () {
 
     var demourl = 'http://localhost:9000/server/temp/'
 
-    function htmlToPlaintext(text) {
+    vm.htmlToPlaintext = function(text) {
         return text ? String(text).replace(/<[^>]+>/gm, '') : '';
     }
 
@@ -43,18 +48,8 @@ angular.element(document).ready(function () {
     function getContents(){
         console.log('inside getcontents');
         $http.get('/api/contents').success(function(contents) {
-            
-            // if(contents.length === 0){
-            //     vm.showContentDiv = false;
-            //     vm.showSelectionDiv = false;
-            // }
-            // else{
-            //     vm.showContentDiv = false;
-            //     vm.showSelection = true;
-            // }
-            //retrieving content titles
-
             console.log('adding content titles to selectbar');
+<<<<<<< HEAD
             
             // for (var i in contents){
             //     if(contents[i].title === undefined){
@@ -68,6 +63,10 @@ angular.element(document).ready(function () {
             // }
 
             console.log(vm.demos);      
+=======
+            console.log(vm.demos);
+
+>>>>>>> 27aa3c1a78608f7b3943022a287a25c87553450c
             vm.contents = contents;
 
             console.log('vm.contents');
@@ -99,8 +98,17 @@ angular.element(document).ready(function () {
 
     vm.selectOption = function() {
         refreshDom();
+        //vm.showContentDiv = true;
         console.log('selection changed ... ');
-        var index = vm.selectedDemo.demoId;
+        if(vm.selectedDemo === null){
+            console.log('No Demo Selected');
+            vm.selectedDemo = 0;
+            var index = 1;
+        }
+        else{
+            var index = vm.selectedDemo.demoId;
+        }
+        
         console.log(index);
         //vm.selectedDemoContent = vm.selectedDemo;
         //vm.selectedDemoId = vm.selectedDemo.demoId;
@@ -163,9 +171,10 @@ angular.element(document).ready(function () {
 
 
     vm.submitBlog = function(){
-        getContents();
         refreshDom();
+        getContents();        
         vm.showSelectionDiv = true;
+        //vm.showContentDiv = false;
         vm.selectOption();
         //$window.location.reload();
         //vm.showContentDiv = false;

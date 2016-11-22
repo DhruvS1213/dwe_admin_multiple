@@ -57,8 +57,16 @@
 	text-align: center;
 }
 
-.selection-panel{
+.selection-panel-div {
 	text-align: center;
+	padding-left: 200px;
+}
+
+.selection-panel{
+	font-size: 2rem;
+	height: 50px;
+    width: 300px;
+    padding: 10px;
 }
 
 .accordian-panel {
