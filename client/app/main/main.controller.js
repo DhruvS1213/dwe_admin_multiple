@@ -179,7 +179,7 @@ angular.module('dweAdminApp')
         getContents();        
         vm.showSelectionDiv = true;
         //vm.showContentDiv = false;
-        vm.selectOption();
+        //vm.selectOption();
         //$window.location.reload();
         //vm.showContentDiv = false;
     }
