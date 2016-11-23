@@ -19,16 +19,36 @@ angular.module('dweAdminApp')
     var tempId;
     var flag=0;
     var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+    var feedbackArray = [{
+        demoId: '1',
+        userName: 'Dhruv',
+        email : 'd@gmail.com',
+        comments: 'good job',
+    }
+        
+
+    ];
     
 
- 
-    angular.element(document).ready(function () {
+    vm.downloadFeedback = function(){
+        console.log('donwloading...');
+        $http.get('api/feedbacks').success(function(feedbacks){
+            
+            feedbackArray = JSON.stringify(feedbacks);
+            console.log(feedbackArray);
+            var blob = new Blob([feedbackArray], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+            });
+            saveAs(blob, "Feedback.xls");
+            alert('done donwloading');
+        });
+         
+    };
 
+    angular.element(document).ready(function () {
         console.log('On Page Refresh');
         CKEDITOR.instances.blogTitle.removeAllListeners();
         CKEDITOR.instances.blogData.removeAllListeners();
-
-
     });
 
     getContents();
