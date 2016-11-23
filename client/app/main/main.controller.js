@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dweAdminApp')
-  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService) {
+  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService, $q) {
     console.log('admin-view');
     
     var vm = this;
@@ -18,33 +18,22 @@ angular.module('dweAdminApp')
     vm.showSelectionDiv = true;
     var tempId;
     var flag=0;
-
-    var addOrUpdate = 0;
-      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
-
     var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
     
 
-console.log('testing httpSERvice');   
-//console.log(httpService);    
- httpService.getData(function(data){
-     console.log(data);
- });
-            
+ 
+    angular.element(document).ready(function () {
 
-angular.element(document).ready(function () {
-
-    console.log('On Page Refresh');
-    CKEDITOR.instances.blogTitle.removeAllListeners();
-    CKEDITOR.instances.blogData.removeAllListeners();
+        console.log('On Page Refresh');
+        CKEDITOR.instances.blogTitle.removeAllListeners();
+        CKEDITOR.instances.blogData.removeAllListeners();
 
 
-});
+    });
 
     getContents();
-
     var demourl = appConfig.url + '/server/temp/'
-    console.log('demoURL test', demourl);
+   
 
     vm.htmlToPlaintext = function(text) {
         return text ? String(text).replace(/<[^>]+>/gm, '') : '';
@@ -54,20 +43,10 @@ angular.element(document).ready(function () {
     function getContents(){
         console.log('inside getcontents');
         $http.get('/api/contents').success(function(contents) {
+            if(contents.length === 0) {
+                vm.showSelectionDiv = false;
+            }
             console.log('adding content titles to selectbar');
-
-            
-            // for (var i in contents){
-            //     if(contents[i].title === undefined){
-            //         console.log('No title given');
-            //         vm.demos.push('No title added yet');
-            //     }
-            //     else{
-            //         console.log(htmlToPlaintext(contents[i].title));
-            //         vm.demos.push(htmlToPlaintext(contents[i].title));
-            //     }
-            // }
-
             console.log(vm.demos);      
 
             console.log(vm.demos);
@@ -257,7 +236,7 @@ angular.element(document).ready(function () {
          $http.post('/api/contents', {demoId: tempId, title: blogTitle}).success(function(res){
                 alert("Title Successfully Uploaded");
         });
-         //getContents();
+         getContents();
        }
        
        else{
@@ -287,7 +266,7 @@ angular.element(document).ready(function () {
            $http.post('/api/contents', {demoId: tempId, textContent: blogData}).success(function(res){
                 alert("Title Successfully Uploaded");
             }); 
-            //getContents();
+            getContents();
         }
         
         else{
@@ -348,7 +327,7 @@ angular.element(document).ready(function () {
                              alert("Data Successfully Uploaded");
                         });
                         //vm.imgJSON = [];
-                        //getContents();
+                        getContents();
                     }
 
                     else{
@@ -381,7 +360,8 @@ angular.element(document).ready(function () {
                         // vm.images= my;
                         // console.log(vm.images);
                         console.log('mylogic',vm.imgJSON);
-                        vm.imgJSON = response.data[vm.selectedDemoId].imageDetail;
+                        console.log(vm.selectedDemoId);
+                        //vm.imgJSON = response.data[vm.selectedDemoId].imageDetail;
                         console.log('mylogic2',vm.imgJSON);
                         for(var i in vm.imgJSON){
                              vm.images[i] = vm.imgJSON[i].imagePath;
@@ -409,7 +389,7 @@ angular.element(document).ready(function () {
                         $http.post('/api/contents/', {demoId: tempId, videoContent: vm.videoPath}).success(function(res){
                              alert("Data Successfully Uploaded");
                         });
-                        //getContents();
+                        getContents();
                     }
                     else{
                         if( addOrUpdate === 0 ){

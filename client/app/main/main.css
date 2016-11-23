@@ -42,15 +42,23 @@
     border: 0;
 }
 
-.add-btn{
-	text-align: center;
+.add-btn-div {
+    text-align: center;
 }
+
+.add-btn{
+    width: 250px;
+    height: 70px;
+    font-size: 25px;
+}
+
 
 .add-new-btn {
 	
     position: relative;
     float: right;
     right: 80px;
+    top: -50px;
 }
 
 .submit-button{
@@ -61,13 +69,14 @@
 
 .selection-panel-div {
 	text-align: center;
-	padding-left: 200px;
+	padding-left: 50px;
+    padding-top: 50px;
 }
 
 .selection-panel{
 	font-size: 2rem;
 	height: 50px;
-    width: 300px;
+    width: 500px;
     padding: 10px;
 }
 
