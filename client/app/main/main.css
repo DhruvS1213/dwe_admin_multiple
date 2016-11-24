@@ -190,3 +190,13 @@ ul {
         border: none;
         border-radius: 4px;
     }
+
+.downloadbutton-style{
+     color: white;
+        background-color: #002661;
+        font-size: 18px;
+        width: 250px;
+        height: 45px;
+        border: none;
+        border-radius: 4px;
+}
