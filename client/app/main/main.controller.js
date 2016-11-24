@@ -37,7 +37,7 @@ angular.module('dweAdminApp')
     });
 
     vm.getHeader = function(){
-        return ["DemoId", "Name", "Email", "Comments"];
+        return ["DemoId", "Name", "Email", "Experience" ,"Comments"];
     }
 
     angular.element(document).ready(function () {
