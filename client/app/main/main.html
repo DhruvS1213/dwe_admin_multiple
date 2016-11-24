@@ -185,9 +185,9 @@
 
 
 <footer class="footer">
-
-  <div class="container">
-      <button ng-click="up.downloadFeedback()">Download Feedback </button>
+    <div class="container">
+      <button ng-csv = "up.feedbackArray" filename = "feedbacks.csv" csv-header = "up.getHeader()"> Download Feedbacks </button>
   </div>
+
 </footer>
 </div>
