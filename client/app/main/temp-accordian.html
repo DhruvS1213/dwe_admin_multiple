@@ -1,56 +1,10 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
-
-    <header class="hero-unit" id="banner">
-    <div class="container">
-        <div>
-            <img style="z-index:3;height:50px;width:160px;margin-left: 10px;" src="assets/images/erricson.png" />
-        </div>
-    </div>
-    </header>
-    <div ng-controller="MainCtrl as up">
-        <br />
-        <br />
-        
-        <!-- This button appears at center when no blog is added -->
-        <div ng-if = "up.contents.length === 0" class="add-btn-div">
-            <button class = "btn btn-success btn-lg add-btn" ng-click="up.addNewBlog()"> + Add Blog </button>
-        </div>
-        <br />
-
-        <!-- This button appears on right side when blogs exist -->
-        <div ng-if = "up.contents.length > 0">
-            <button class = "btn btn-success btn-lg add-new-btn" ng-click="up.addNewBlog()"> + Add New Blog </button>
-        </div>
-
-    
-        <!-- Select Demo panel-->
-        <div class="selection-panel-div" ng-if="up.showSelectionDiv">
-            <select class = "selection-panel" ng-change = "up.selectOption()" ng-model="up.selectedDemo" ng-options="demo as (up.htmlToPlaintext(demo.title)) for demo in up.contents">
-            </select>        
-        </div>
-
-    
-        <div class = "content-border-div" ng-if="up.showContentDiv">
-            <br />
-            <br />
-            <!-- ACCORDIAN BEGINS HERE -->
-            <accordion>
-                <!-- HEADING ACCORDIAN -->
-                <accordion-group>
-                    <accordion-heading>
-                    <div class="acc-heading">
-                        Enter Heading
-                    </div>
-                    </accordion-heading>
-                    
+<ul>
+            <button class="acc-button" ng-click="up.accordianFunction(1)"><div class="accordian-block accordian-panel"><li > Enter Heading</li></div> </button>
+                <div class="headingpart" ng-show="up.showHeading">
                     <div>
-                        <!-- CKEDITOR for heading -->
-                        <textarea ng-model="up.title" name="blogTitle"></textarea>
+                        <!--<label>Enter Heading </label>-->
+                        <!--<textarea ng-model="up.title" name="blogTitle"></textarea>
                         <script>
-                            // CODE TO CUSTOMIZE THE EDITOR WITH LESS NUMBER OF OPTIONS
-                            // This editor only contains
-                            // 1. Color button 2. Basic Styling options 3. Clipboard
-
                             CKEDITOR.plugins.addExternal( 'colorbutton', '/plugins/colorbutton/', 'plugin.js' );
                             CKEDITOR.plugins.addExternal( 'panelbutton', '/plugins/panelbutton/', 'plugin.js' );
                             CKEDITOR.plugins.addExternal( 'language', '/plugins/language/', 'plugin.js' );
@@ -72,49 +26,39 @@
                                     { name: 'colors', items: [ 'TextColor', 'BGColor' ] }
                                 ]
                             });
-                        </script>
-                        <!-- CKEDITOR ends -->
+
+                            
+
+                        </script>-->
                     </div>
                     <br>
                     <div>
-                        <button type = "button" class = "btn btn-primary" ng-click="up.uploadTitle(up.title)" >Change Heading</button>
+                         <button type = "button" class = "btn btn-primary" ng-click="up.uploadTitle(up.title)" >Change Heading</button>
                     </div>
-                </accordion-group>
-                <!-- HEADING Accordian ends here -->
-                
-                <!-- Accordian for Text Content of blog-->
-                <accordion-group>
-                    <accordion-heading>  
-
-                    <div class="acc-heading">
-                        Enter Text
-                    </div>
-                        
-                    </accordion-heading>
-                    
+                </div>
+        <br>
+        <br />
+        <br />
+            <button class="acc-button" ng-click="up.accordianFunction(2)"><div class="accordian-block accordian-panel"> <li > Enter Text Content </li> </div></button>
+                <div class="textpart" ng-show="up.showTextContent">
                     <div>
-                        <textarea ng-model="up.data" name="blogData"></textarea>
+                        <!--<label>Enter Textual Content</label>-->
+                        <!--<textarea ng-model="up.data" name="blogData"></textarea>
                         <script>
                             CKEDITOR.replace( 'blogData' );
-                        </script>
+                        </script>-->
                     </div>
-                    <br />
+                    <br>
                     <div>
                         <button type = "button" class = "btn btn-primary" ng-click="up.uploadData(up.data)" >Upload Text</button>
                     </div>
-                </accordion-group>
-                <!-- Text Content accordian ends here-->
+                </div>
 
-
-                <!-- ACCORDIAN FOR Image Upload -->
-                <accordion-group>
-                    <accordion-heading>
-
-                    <div class="acc-heading">
-                         Upload Image 
-                    </div>
-  
-                    </accordion-heading>
+        <br>
+        <br />
+        <br />
+            <button class="acc-button" ng-click="up.accordianFunction(3)"><div class="accordian-block accordian-panel"><li > Upload Image </li></div></button>
+                <div class="imagepart" ng-show="up.showImagePart">
                     <div class="clearfix">
                         <div class="col-md-4">
                             <form name="up.upload_form">
@@ -150,25 +94,18 @@
                     </div>
 
                     <div class="clearfix">
-                        <div class="col-md-8">
-                            <p>{{up.progressText1}}</p>
-                            <!--  <progress class="progbar" min="0" value="{{up.imUploadProgress}}" max="100" ></progress> -->
-                        </div>
-                    </div>    
-                </accordion-group>
-                <!-- Image Accordian ends here-->
-            
-                <!-- VIDEO Accordian -->
-                <accordion-group>
-                    <accordion-heading>
-
-                    <div class="acc-heading">
-                           Upload Video  
+                    <div class="col-md-8">
+                        <p>{{up.progressText1}}</p>
+                       <!--  <progress class="progbar" min="0" value="{{up.imUploadProgress}}" max="100" ></progress> -->
                     </div>
-                    
-                      
-                    </accordion-heading>
+                    </div>
+                </div>
                 
+        <br>
+        <br />
+        <br />
+            <button class="acc-button" ng-click="up.accordianFunction(4)"><div class="accordian-block accordian-panel"> <li > Upload Video </li></div></button>
+                <div class="videopart" ng-show="up.showVideoPart">
                     <div class="clearfix">
                         <div class="col-md-4">
                             <label>Select Video</label>
@@ -197,23 +134,71 @@
 
                         </div>
                         <p>{{up.progressText2}}</p>
-                    </div> 
-                </accordion-group>
-                <!-- Video Accordian ends here-->
-            
-            </accordian>
-        
-            <div class="submit-button">
-                <button class="button-style" ng-click="up.submitBlog()"> Submit </button>
-            </div>
+<!--                         <progress class="progbar" min="0" value="{{up.vidUploadProgress}}" max="100" ></progress>     
+ -->                    </div> 
+                </div>
+        </form>
 
-        </div>
-  
+        <br>
+        </ul>
 
-        <footer class="footer">
-            <div class="container">
-                <button class="downloadbutton-style" ng-csv = "up.getFeedbackArray()" filename = "feedbacks.csv" csv-header = "up.getHeader()"> Download Feedbacks </button>
-            </div>
-        </footer>
 
-    </div>
+
+
+
+        <script>
+        vm.accordianFunction = function(id){
+        if(id == 1)
+        {
+            vm.showHeading = !vm.showHeading;
+            if(vm.showHeading && vm.showTextContent){
+                vm.showTextContent = !vm.showTextContent;
+            }
+            if(vm.showHeading && vm.showImagePart){
+                vm.showImagePart = !vm.showImagePart;
+            }
+            if(vm.showHeading && vm.showVideoPart){
+                vm.showVideoPart = !vm.showVideoPart;
+            }
+        }
+        if(id == 2)
+        {
+            vm.showTextContent = !vm.showTextContent;
+            if(vm.showHeading && vm.showTextContent){
+                vm.showHeading = !vm.showHeading;
+            }
+            if(vm.showTextContent && vm.showImagePart){
+                vm.showImagePart = !vm.showImagePart;
+            }
+            if(vm.showTextContent && vm.showVideoPart){
+                vm.showVideoPart = !vm.showVideoPart;
+            }
+        }
+        if(id == 3)
+        {
+            vm.showImagePart = !vm.showImagePart;
+            if(vm.showHeading && vm.showImagePart){
+                vm.showHeading = !vm.showHeading;
+            }
+            if(vm.showTextContent && vm.showImagePart){
+                vm.showTextContent = !vm.showTextContent;
+            }
+            if(vm.showImagePart && vm.showVideoPart){
+                vm.showVideoPart = !vm.showVideoPart;
+            }
+        }
+        if(id == 4)
+        {
+            vm.showVideoPart = !vm.showVideoPart;
+            if(vm.showHeading && vm.showVideoPart){
+                vm.showHeading = !vm.showHeading;
+            }
+            if(vm.showTextContent && vm.showVideoPart){
+                vm.showTextContent = !vm.showTextContent;
+            }
+            if(vm.showImagePart && vm.showVideoPart){
+                vm.showImagePart = !vm.showImagePart;
+            }
+        }
+    };
+        </script>

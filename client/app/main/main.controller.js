@@ -1,10 +1,23 @@
 'use strict';
 
 angular.module('dweAdminApp')
-  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService, $q) {
+  .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService, uploadDataService, uploadVideoService, uploadImageService, $q) {
     console.log('admin-view');
     
+    // Temporary variables
     var vm = this;
+    var demourl = appConfig.url + '/server/temp/'
+    var tempId;
+    var flag=0;
+    var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
+    var requestParams = {
+        demoId : '',
+        blogContent : '',
+        imageDetail : '',
+        videoContent : ''
+    }
+    
+    // View-model variables
     vm.selectedBlogId = 0;
     vm.contents = [];
     vm.images = [];
@@ -16,86 +29,71 @@ angular.module('dweAdminApp')
     vm.selectedDemoContent = [];
     vm.showContentDiv = false;
     vm.showSelectionDiv = true;
-    var tempId;
-    var flag=0;
-    var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
-    
+    vm.feedbackArray = [];
+    vm.showLink = 0;
+    vm.feedbackLink = '#';
 
- 
-    angular.element(document).ready(function () {
-
-        console.log('On Page Refresh');
+    // Removing all the instances attached to CKEDITORS
+    angular.element( document ).ready( function () {
+        console.log( 'On Page Refresh' );
         CKEDITOR.instances.blogTitle.removeAllListeners();
         CKEDITOR.instances.blogData.removeAllListeners();
-
-
     });
-
+    
+    // Fetching contents for the blog data via API
     getContents();
-    var demourl = appConfig.url + '/server/temp/'
-   
 
-    vm.htmlToPlaintext = function(text) {
-        return text ? String(text).replace(/<[^>]+>/gm, '') : '';
+    // Function to download Feedbacks in a CSV File
+    vm.getFeedbackArray = function() {
+        var defer = $q.defer();
+        httpService.getData( '/api/feedbacks' )
+            .then(function( feedbacks ) {
+                console.log( 'Feedbacks Recieved' );
+                defer.resolve(feedbacks);
+                for( var i in feedbacks ){
+                    // looping through feedbacks to delete id and version field
+                    delete feedbacks[ i ][ '_id' ];
+                    delete feedbacks[ i ][ '__v' ];
+                }
+                vm.feedbackArray = feedbacks;
+                console.log(vm.feedbackArray);
+            }, function( error ){
+                console.log('Error in fetching feedbacks');
+            });
+        return defer.promise;
+    }
+     
+    // Function returns headers for the feedback excel sheet
+    vm.getHeader = function(){
+        return ["DemoId", "Name", "Email", "Experience" ,"Comments"];
     }
 
-
-    function getContents(){
-        console.log('inside getcontents');
-        $http.get('/api/contents').success(function(contents) {
-            if(contents.length === 0) {
-                vm.showSelectionDiv = false;
-            }
-            console.log('adding content titles to selectbar');
-            console.log(vm.demos);      
-
-            console.log(vm.demos);
-
-            vm.contents = contents;
-
-            console.log('vm.contents');
-            console.log(vm.contents);
-        });
-    }   
-
-    function refreshDom() {
-        vm.title = '';
-        CKEDITOR.instances.blogTitle.setData('');
-        CKEDITOR.instances.blogData.setData('');
-        vm.data = '';
-        vm.images = [];
-        vm.imgJSON = [];
-        vm.imgDescription = [];
-        vm.videoPath = [];
+    vm.htmlToPlaintext = function( text ) {
+        return text ? String( text ).replace( /<[^>]+>/gm, '' ) : '';
     }
 
-    vm.addNewBlog = function() {
+     vm.addNewBlog = function() {
         refreshDom();
         addOrUpdate = 0;    // Signifying that new content is being added
-        //getContents();
         vm.showContentDiv = true;
         vm.showSelectionDiv = false;
-        
         tempId = vm.contents.length + 1;
-
     }
 
     vm.selectOption = function() {
         refreshDom();
-        //vm.showContentDiv = true;
         console.log('selection changed ... ');
-        if(vm.selectedDemo === null){
+        if(vm.selectedDemo === null) {
             console.log('No Demo Selected');
             vm.selectedDemo = 0;
             var index = 1;
         }
-        else{
+        
+        else {
             var index = vm.selectedDemo.demoId;
         }
         
         console.log(index);
-        //vm.selectedDemoContent = vm.selectedDemo;
-        //vm.selectedDemoId = vm.selectedDemo.demoId;
         $http.get('/api/contents/'+index).success(function(content){
             vm.selectedDemoContent = content;
             vm.selectedDemoId = vm.selectedDemoContent.demoId;
@@ -158,10 +156,6 @@ angular.module('dweAdminApp')
         refreshDom();
         getContents();        
         vm.showSelectionDiv = true;
-        //vm.showContentDiv = false;
-        vm.selectOption();
-        //$window.location.reload();
-        //vm.showContentDiv = false;
     }
 
     vm.selected = function(){
@@ -169,118 +163,56 @@ angular.module('dweAdminApp')
 
     }
 
-
-
-
-    vm.accordianFunction = function(id){
-        if(id == 1)
-        {
-            vm.showHeading = !vm.showHeading;
-            if(vm.showHeading && vm.showTextContent){
-                vm.showTextContent = !vm.showTextContent;
-            }
-            if(vm.showHeading && vm.showImagePart){
-                vm.showImagePart = !vm.showImagePart;
-            }
-            if(vm.showHeading && vm.showVideoPart){
-                vm.showVideoPart = !vm.showVideoPart;
-            }
-        }
-        if(id == 2)
-        {
-            vm.showTextContent = !vm.showTextContent;
-            if(vm.showHeading && vm.showTextContent){
-                vm.showHeading = !vm.showHeading;
-            }
-            if(vm.showTextContent && vm.showImagePart){
-                vm.showImagePart = !vm.showImagePart;
-            }
-            if(vm.showTextContent && vm.showVideoPart){
-                vm.showVideoPart = !vm.showVideoPart;
-            }
-        }
-        if(id == 3)
-        {
-            vm.showImagePart = !vm.showImagePart;
-            if(vm.showHeading && vm.showImagePart){
-                vm.showHeading = !vm.showHeading;
-            }
-            if(vm.showTextContent && vm.showImagePart){
-                vm.showTextContent = !vm.showTextContent;
-            }
-            if(vm.showImagePart && vm.showVideoPart){
-                vm.showVideoPart = !vm.showVideoPart;
-            }
-        }
-        if(id == 4)
-        {
-            vm.showVideoPart = !vm.showVideoPart;
-            if(vm.showHeading && vm.showVideoPart){
-                vm.showHeading = !vm.showHeading;
-            }
-            if(vm.showTextContent && vm.showVideoPart){
-                vm.showTextContent = !vm.showTextContent;
-            }
-            if(vm.showImagePart && vm.showVideoPart){
-                vm.showImagePart = !vm.showImagePart;
-            }
-        }
-    };
-
     vm.uploadTitle = function(head)
     {
-       var blogTitle = CKEDITOR.instances.blogTitle.getData();
-       var blogData = CKEDITOR.instances.blogData.getData();
-       //console.log(blogTitle);
-       if(blogData === '' && vm.images.length === 0 && vm.videoPath.length === 0 && addOrUpdate === 0  ){
-         $http.post('/api/contents', {demoId: tempId, title: blogTitle}).success(function(res){
-                alert("Title Successfully Uploaded");
-        });
+        var contentId;
+        var blogTitle = CKEDITOR.instances.blogTitle.getData();
+        var blogData = CKEDITOR.instances.blogData.getData();
+        requestParams.demoId = tempId;
+        requestParams.blogContent = blogTitle;
+
+        if(blogData === '' && vm.images.length === 0 && vm.videoPath.length === 0 && addOrUpdate === 0  ){
+            uploadDataService.postData( '/api/contents', 'title', requestParams )
+                .then( function ( response ) {
+                    console.log( 'Title created successfully' );
+                    console.log( response );
+                }, function ( error ) {
+                    console.log( 'Error in creating title' );
+                });
          getContents();
        }
        
-       else{
-          if (addOrUpdate === 0) {
-              $http.put('/api/contents/' + vm.contents[tempId - 1]._id, {title: blogTitle}).success(function(res){
-                  alert("Data Successfully Uploaded");
-              });
-          }
-          if (addOrUpdate === 1) {
-               $http.put('/api/contents/' + vm.selectedDemoContent._id, {title: blogTitle}).success(function(res){
-                  alert("Data Successfully Uploaded");
-               });
-          }
-          
+        else{
+
+            if (addOrUpdate === 0) { contentId = vm.contents[tempId - 1]._id; }
+            if (addOrUpdate === 1) { contentId = vm.selectedDemoContent._id; }
+            updateBlogData('/api/contents/', contentId, 'title', requestParams);
         }  
     };
 
     vm.uploadData = function(head)
     {
-       var blogTitle = CKEDITOR.instances.blogTitle.getData();
-       var blogData = CKEDITOR.instances.blogData.getData();
+        var contentId;
+        var blogTitle = CKEDITOR.instances.blogTitle.getData();
+        var blogData = CKEDITOR.instances.blogData.getData();
+        requestParams.demoId = tempId;
+        requestParams.blogContent = blogData;
 
-       //console.log(blogData);
-
-       if(blogTitle === '' && vm.images.length === 0 && vm.videoPath.length === 0 && addOrUpdate === 0 ){
-          
-           $http.post('/api/contents', {demoId: tempId, textContent: blogData}).success(function(res){
-                alert("Title Successfully Uploaded");
-            }); 
+        if(blogTitle === '' && vm.images.length === 0 && vm.videoPath.length === 0 && addOrUpdate === 0 ){
+            uploadDataService.postData( '/api/contents', 'textContent', requestParams )
+                .then( function ( response ) {
+                    console.log( 'Content created successfully' );
+                    console.log( response );
+                }, function ( error ) {
+                    console.log( 'Error in creating content' );
+                });
             getContents();
         }
         
         else{
-            if( addOrUpdate === 0 ) {
-                $http.put('/api/contents/' + vm.contents[tempId - 1]._id, {textContent: blogData}).success(function(res){
-                    alert("Data Successfully Uploaded");
-                });
-            }
-            if( addOrUpdate === 1) {
-                $http.put('/api/contents/' + vm.selectedDemoContent._id, {textContent: blogData}).success(function(res){
-                alert("Data Successfully Uploaded");
-            });
-            } 
-            
+            if (addOrUpdate === 0) { contentId = vm.contents[tempId - 1]._id; }
+            if (addOrUpdate === 1) { contentId = vm.selectedDemoContent._id; }
+            updateBlogData('/api/contents/', contentId, 'textContent', requestParams);
         }
     };
 
@@ -296,7 +228,8 @@ angular.module('dweAdminApp')
     };
 
     vm.upload = function(file, contentType){
-      Upload.upload({
+        var contentId;
+        Upload.upload({
             url: '/api/contents/imageFile', 
             data:{file:file} 
         }).then(function (resp) { 
@@ -304,6 +237,7 @@ angular.module('dweAdminApp')
             if(resp.data.error_code === 0){ 
                 console.log(resp.config.data.file.name);
                 $window.alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
+                
                 if(contentType === 1)
                 {
                     name = resp.config.data.file.name;
@@ -319,60 +253,29 @@ angular.module('dweAdminApp')
                     vm.imgJSON.push(temp);
                     console.log('upload function');
                     console.log(vm.imgJSON);
+                    
                     var blogTitle = CKEDITOR.instances.blogTitle.getData();
                     var blogData = CKEDITOR.instances.blogData.getData();
-                    if(blogTitle === '' && vm.blogData === '' && vm.videoPath.length === 0 && addOrUpdate === 0) {
-                        
-                        $http.post('/api/contents/', {demoId: tempId, imageDetail: vm.imgJSON}).success(function(res){
-                             alert("Data Successfully Uploaded");
-                        });
-                        //vm.imgJSON = [];
+                    requestParams.demoId = tempId;
+                    requestParams.imageDetail = vm.imgJSON;
+
+                    if(blogTitle === '' && blogData === '' && vm.videoPath.length === 0 && addOrUpdate === 0) {
+                        console.log( ' image post request' );
+                        uploadImageService.postImageDetail ( '/api/contents', requestParams ) 
+                            .then( function ( resp ) {
+                                console.log( 'Image uploaded successfully' );
+                                console.log( resp );
+                            }, function ( error ) {
+                                console.log( 'error in uploading image' );
+                            });
                         getContents();
                     }
 
                     else{
-                        if( addOrUpdate === 0 ){
-                            $http.put('/api/contents/' + vm.contents[tempId-1]._id, {imageDetail: vm.imgJSON}).success(function(res){
-                                 alert("Data Successfully Uploaded");
-                            });
-                            //vm.imgJSON = [];
-                        }
-                        if( addOrUpdate === 1 ){
-                            $http.put('/api/contents/' + vm.selectedDemoContent._id, {imageDetail: vm.imgJSON}).success(function(res){
-                                alert("Data Successfully Uploaded");
-                            });
-                            //vm.imgJSON = [];
-                        }
-                        
-
+                        if (addOrUpdate === 0) { contentId = vm.contents[tempId - 1]._id; }
+                        if (addOrUpdate === 1) { contentId = vm.selectedDemoContent._id; }
+                        updateImageContent('/api/contents/', contentId, requestParams);
                     }
-
-
-                     
-                $http({
-                    method: 'GET',
-                    url: appConfig.url + '/api/contents'
-                }).then(function successCallback(response)
-                    {
-                        // console.log(response.data[0].imageContent);
-                        // var my = response.data[0].imageContent.split(",");
-                        // console.log(my);
-                        // vm.images= my;
-                        // console.log(vm.images);
-                        console.log('mylogic',vm.imgJSON);
-                        console.log(vm.selectedDemoId);
-                        //vm.imgJSON = response.data[vm.selectedDemoId].imageDetail;
-                        console.log('mylogic2',vm.imgJSON);
-                        for(var i in vm.imgJSON){
-                             vm.images[i] = vm.imgJSON[i].imagePath;
-                             vm.imgDescription[i] = vm.imgJSON[i].imageDescription;
-                        }
-
-                    }, function errorCallback(error)
-                    {
-                        console.log('error');
-                    });
-                    
                 } 
 
                 if(contentType === 2)
@@ -382,32 +285,29 @@ angular.module('dweAdminApp')
                     console.log(demourl + name);
                     vm.videoPath.push(demourl+name);
                     console.log(vm.videoPath);
+                    
                     var blogTitle = CKEDITOR.instances.blogTitle.getData();
                     var blogData = CKEDITOR.instances.blogData.getData();
+                    requestParams.demoId = tempId;
+                    requestParams.videoContent = vm.videoPath;
+
                     if(blogTitle === '' && blogData === '' && vm.images.length === 0 && addOrUpdate === 0){
-                        
-                        $http.post('/api/contents/', {demoId: tempId, videoContent: vm.videoPath}).success(function(res){
-                             alert("Data Successfully Uploaded");
+                        uploadVideoService.postVideo ( '/api/contents', requestParams )
+                            .then( function ( response ) {
+                                console.log( 'Video uploaded successfully' );
+                                console.log( response );
+                            }, function( error ) {
+                                console.log( 'Error in uploading video' );
                         });
                         getContents();
                     }
                     else{
-                        if( addOrUpdate === 0 ){
-                            $http.put('/api/contents/' + vm.contents[tempId - 1]._id, {videoContent: vm.videoPath}).success(function(res){
-                                alert("Data Successfully Uploaded");
-                            });
-                        }
-                        if ( addOrUpdate === 1 ){
-                            $http.put('/api/contents/' + vm.selectedDemoContent._id, {videoContent: vm.videoPath}).success(function(res){
-                            alert("Data Successfully Uploaded");
-                        });
-                        }
-                           
+                        if (addOrUpdate === 0) { contentId = vm.contents[tempId - 1]._id; }
+                        if (addOrUpdate === 1) { contentId = vm.selectedDemoContent._id; }
+                        updateVideoContent('/api/contents/', contentId, requestParams);
                     } 
-
                     vm.vidUploadProgress = 0;
-                    vm.file = '';  
-                     
+                    vm.file = '';   
                 }
             } 
         }, function (resp) 
@@ -434,11 +334,7 @@ angular.module('dweAdminApp')
             });
     };
 
-
-
-
     vm.addDescription = function(description, index){
-
         vm.imgJSON= vm.selectedDemoContent.imageDetail;
         for(var i=0; i<vm.imgJSON.length; i++) {
             console.log('Searching if ID Exists');
@@ -454,15 +350,10 @@ angular.module('dweAdminApp')
                 break;
             }
         }
-        
+        requestParams.imageDetail = vm.imgJSON;
         console.log('json-length', vm.imgJSON);
-        
-        $http.put('/api/contents/' + vm.selectedDemoContent._id, {imageDetail: vm.imgJSON }).success(function(res){
-            alert("Data Successfully Uploaded");
-        });
+        updateImageContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );
     }
-
-
 
     vm.removeImage = function(index){
         console.log('image requrest to delete')
@@ -477,11 +368,11 @@ angular.module('dweAdminApp')
             vm.imgJSON[i].id  = vm.imgJSON[i].id - 1 ;
             console.log(vm.imgJSON[i].id);
         }
-        $http.put('/api/contents/' + vm.selectedDemoContent._id, {imageDetail: vm.imgJSON }).success(function(res){
-            alert("Image DELETED Successfully");
-        });
-    }
 
+        requestParams.imageDetail = vm.imgJSON;
+        console.log('json-length', vm.imgJSON);
+        updateImageContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );
+    }
 
     vm.removeVideo = function(index){
         console.log('video delete request made');
@@ -489,10 +380,63 @@ angular.module('dweAdminApp')
         vm.videoPath = vm.selectedDemoContent.videoContent;
         vm.videoPath.splice(index,1);
         console.log(vm.videoPath)
+        requestParams.videoContent = vm.videoPath;
+        updateVideoContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );
+    }
 
-        $http.put('/api/contents/' + vm.selectedDemoContent._id, {videoContent: vm.videoPath }).success(function(res){
-            alert("Video DELETED Successfully");
+    function refreshDom() {
+        vm.title = '';
+        CKEDITOR.instances.blogTitle.setData('');
+        CKEDITOR.instances.blogData.setData('');
+        vm.data = '';
+        vm.images = [];
+        vm.imgJSON = [];
+        vm.imgDescription = [];
+        vm.videoPath = [];
+    }
+
+    function getContents() {
+        console.log( 'inside getcontents' );
+        uploadDataService.getData( '/api/contents/' )
+            .then(function( contents ) {
+                if( contents.length === 0 ) {
+                    vm.showSelectionDiv = false;
+                }
+                vm.contents = contents;
+                console.log( 'vm.contents' );
+                console.log( vm.contents );
+           }, function( error ){
+                console.log( 'error in fetching contents' );
         });
     }
 
+    function updateBlogData ( requestUrl, contentId, blogEntry, requestParams ) {
+        uploadDataService.updateContentData( requestUrl, contentId, blogEntry, requestParams )
+            .then(function( response ) {
+                console.log( 'Title updated successfully' );
+                console.log( response );
+            }, function( error ){
+                console.log( 'Error in updating blog data' );
+        });
+    }
+
+    function updateImageContent ( requestUrl, contentId, requestParams ) {
+        uploadImageService.updateImageDetail ( requestUrl, contentId, requestParams )
+            .then( function ( response ) {
+                console.log( 'Image details updated successfully' );
+                console.log( response );
+            }, function( error ){
+                console.log( 'Error in updating image details' );
+        });
+    }
+
+    function updateVideoContent ( requestUrl, contentId, requestParams ) {
+        uploadVideoService.updateVideo ( requestUrl, contentId, requestParams )
+            .then( function ( response ) {
+                console.log( 'Video details updated successfully' );
+                console.log( response );
+            }, function ( error ) {
+                console.log( 'Error in updating video' );
+            });
+    }
 })
