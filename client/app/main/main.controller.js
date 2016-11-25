@@ -184,64 +184,6 @@ angular.module('dweAdminApp')
 
     }
 
-
-
-
-    vm.accordianFunction = function(id){
-        if(id == 1)
-        {
-            vm.showHeading = !vm.showHeading;
-            if(vm.showHeading && vm.showTextContent){
-                vm.showTextContent = !vm.showTextContent;
-            }
-            if(vm.showHeading && vm.showImagePart){
-                vm.showImagePart = !vm.showImagePart;
-            }
-            if(vm.showHeading && vm.showVideoPart){
-                vm.showVideoPart = !vm.showVideoPart;
-            }
-        }
-        if(id == 2)
-        {
-            vm.showTextContent = !vm.showTextContent;
-            if(vm.showHeading && vm.showTextContent){
-                vm.showHeading = !vm.showHeading;
-            }
-            if(vm.showTextContent && vm.showImagePart){
-                vm.showImagePart = !vm.showImagePart;
-            }
-            if(vm.showTextContent && vm.showVideoPart){
-                vm.showVideoPart = !vm.showVideoPart;
-            }
-        }
-        if(id == 3)
-        {
-            vm.showImagePart = !vm.showImagePart;
-            if(vm.showHeading && vm.showImagePart){
-                vm.showHeading = !vm.showHeading;
-            }
-            if(vm.showTextContent && vm.showImagePart){
-                vm.showTextContent = !vm.showTextContent;
-            }
-            if(vm.showImagePart && vm.showVideoPart){
-                vm.showVideoPart = !vm.showVideoPart;
-            }
-        }
-        if(id == 4)
-        {
-            vm.showVideoPart = !vm.showVideoPart;
-            if(vm.showHeading && vm.showVideoPart){
-                vm.showHeading = !vm.showHeading;
-            }
-            if(vm.showTextContent && vm.showVideoPart){
-                vm.showTextContent = !vm.showTextContent;
-            }
-            if(vm.showImagePart && vm.showVideoPart){
-                vm.showImagePart = !vm.showImagePart;
-            }
-        }
-    };
-
     vm.uploadTitle = function(head)
     {
        var blogTitle = CKEDITOR.instances.blogTitle.getData();
