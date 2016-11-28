@@ -3,7 +3,6 @@
 angular.module('dweAdminApp')
     .factory('uploadImageService', ['$http', '$q', 
         function ($http, $q) {
-        
             var baseUrl = 'http://localhost:9000';
             var uploadImageService = {
                 dataRetrieved : [],
@@ -30,13 +29,19 @@ angular.module('dweAdminApp')
                 $http.put( baseUrl + requestApi + contentId, {imageDetail: requestParams.imageDetail } )
                   .success( function( response ) {
                         uploadImageService.response = response;
-                        def.resolve( response );
+                        def.resolve( fetchData() );
                     })
                     .error( function( error ){
                         def.reject( 'Failed to update content' );
                     })
                 return def.promise;  
             }
-
+            
+            function fetchData() {
+                $http.get( baseUrl + '/api/feedbacks')
+                    .success( function ( response ) {
+                        return response;
+                    })
+            }
 
         }]);

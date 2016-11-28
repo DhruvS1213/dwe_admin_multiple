@@ -62,15 +62,13 @@
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+      <script src="bower_components/ckeditor/ckeditor.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
-        <!-- CKEDITOR -->
-        <script src="//cdn.ckeditor.com/4.5.11/full/ckeditor.js"></script>
-        <!---->
         <!---->
           <!-- injector:js -->
           <script src="app/account/account.js"></script>
@@ -79,11 +77,14 @@
           <script src="app/account/signup/signup.controller.js"></script>
           <script src="app/admin/admin.controller.js"></script>
           <script src="app/admin/admin.js"></script>
+          <script src="app/main/http.service.js"></script>
           <script src="app/main/main.constant.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.filter.js"></script>
-          <script src="app/main/main.httpService.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="app/main/uploadData.service.js"></script>
+          <script src="app/main/uploadImage.service.js"></script>
+          <script src="app/main/uploadVideo.service.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/http-data-service/fetch-data.service.js"></script>
