@@ -16,7 +16,7 @@ angular.module('dweAdminApp')
         })
         .then( function() {
           // Account created, redirect to home
-          $location.path('/');
+          $location.path('/main');
         })
         .catch( function(err) {
           err = err.data;

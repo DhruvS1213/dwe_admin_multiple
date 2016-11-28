@@ -4,7 +4,7 @@ angular.module('dweAdminApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
       'title': 'Home',
-      'link': '/'
+      'link': '/main'
     }];
 
     $scope.isCollapsed = true;
