@@ -29,7 +29,7 @@ angular.module('dweAdminApp')
                 $http.put( baseUrl + requestApi + contentId, {imageDetail: requestParams.imageDetail } )
                   .success( function( response ) {
                         uploadImageService.response = response;
-                        def.resolve( fetchData() );
+                        def.resolve( response );
                     })
                     .error( function( error ){
                         def.reject( 'Failed to update content' );
@@ -37,11 +37,7 @@ angular.module('dweAdminApp')
                 return def.promise;  
             }
             
-            function fetchData() {
-                $http.get( baseUrl + '/api/feedbacks')
-                    .success( function ( response ) {
-                        return response;
-                    })
-            }
+
+                
 
         }]);

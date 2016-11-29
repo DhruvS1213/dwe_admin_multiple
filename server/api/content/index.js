@@ -11,5 +11,6 @@ router.get('/:demoId', controller.show);
 router.put('/:id', controller.update);
 router.post('/imageFile', controller.uploadImage);
 router.post('/uploads', controller.showImage);
+router.get('/forgot/password', controller.forgotPassword);
 
 module.exports = router;

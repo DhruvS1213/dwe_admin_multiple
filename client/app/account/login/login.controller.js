@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dweAdminApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location, $window) {
+  .controller('LoginCtrl', function ($scope, Auth, $location, $window, httpService) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -26,4 +26,11 @@ angular.module('dweAdminApp')
     $scope.loginOauth = function(provider) {
       $window.location.href = '/auth/' + provider;
     };
+
+    $scope.forgotPassword = function() {
+      httpService.sendRequest('/api/contents/forgot/password')
+        .then( function ( reponse ) {
+          console.log('done');
+        });
+    }
   });

@@ -12,7 +12,10 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var Content = require('./content.model');
-var url = 'http://localhost:9000'
+var url = 'http://localhost:9000';
+// var sendgrid = require("sendgrid")("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");
+var Sendgrid = require("sendgrid-web");
+
 
 // Get list of contents
 exports.index = function(req, res) {
@@ -74,7 +77,29 @@ exports.uploadImage = function(req, res){
     });
 };
 
- var storage = multer.diskStorage({
+exports.forgotPassword = function (req, res) {
+  console.log('invoked server side');
+  var sendgrid = new Sendgrid({
+      user: "dhruv.shah4192@gmail.com",
+      key: "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"
+    });
+ 
+  sendgrid.send({
+    to: 'dhruv.shah4192@gmail.com',
+    from: 'dhruv.shah4192@gmail.com',
+    subject: 'Hello world!',
+    html: '<h1>Hello world!</h1>'
+  }, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Success.");
+    }
+  });
+  res.end();
+}
+
+var storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, './server/temp/');
         },

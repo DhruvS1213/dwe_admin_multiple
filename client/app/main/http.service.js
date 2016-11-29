@@ -7,7 +7,8 @@ angular.module('dweAdminApp')
             var baseUrl = 'http://localhost:9000';
             var service = {
                 dataRetrieved : [],
-                getData: getData
+                getData: getData,
+                sendRequest : sendRequest
             };
             return service;
             
@@ -21,6 +22,18 @@ angular.module('dweAdminApp')
                     .error(function( error ){
                         def.reject( 'Failed to get data' );
                     })
+                    return def.promise;
+            }
+
+            function sendRequest ( requestApi ) {
+                var def = $q.defer();
+                $http.get( baseUrl + requestApi )
+                    .success( function ( response )  {
+                        def.resolve( response );
+                    })
+                    .error ( function ( error ) {
+                        def.reject( 'Failed' );
+                    }) 
                     return def.promise;
             }
 
