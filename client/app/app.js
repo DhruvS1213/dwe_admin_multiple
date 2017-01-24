@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('dweAdminApp', [
+  'ui.router',
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'btford.socket-io',
-  'ui.router',
+  
   'ui.bootstrap',
   'ngFileUpload'
 ])

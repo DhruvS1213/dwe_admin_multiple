@@ -3,13 +3,11 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var FeedbackSchema = new Schema({
+var troubleTicketSchema = new Schema({
   demoId: Number,
   userName: String,
-  email: String,
   comments: String,
-  experience: String,
   active: Boolean
 });
 
-module.exports = mongoose.model('Feedback', FeedbackSchema);
+module.exports = mongoose.model('troubleTicket', troubleTicketSchema);
