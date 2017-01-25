@@ -4,7 +4,7 @@ angular.module('dweAdminApp')
   .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService, uploadDataService, uploadVideoService, uploadImageService, $q) {
     console.log('admin-view');
     
-    
+
     // Temporary variables
     var vm = this;
     var demourl = appConfig.url + '/server/temp/'
@@ -48,28 +48,39 @@ angular.module('dweAdminApp')
     getContents();
 
     // Function to download Feedbacks in a CSV File
-    vm.getFeedbackArray = function() {
-        console.log('feedbacks');
-        var defer = $q.defer();
-        $http.get( '/api/feedbacks' )
-            .then(function( feedbacks ) {
-                console.log('got my feedbacks',feedbacks);
-                vm.feedbackObject = feedbacks;
-                console.log( 'Feedbacks Recieved',vm.feedbackObject );
-                defer.resolve(feedbacks);
-                for( var i in feedbacks ){
-                    // looping through feedbacks to delete id and version field
-                    delete feedbacks[ i ][ '_id' ];
-                    delete feedbacks[ i ][ '__v' ];
-                }
-                vm.feedbackArray = feedbacks;
-                console.log(vm.feedbackArray);
-            }, function( error ){
-                console.log('Error in fetching feedbacks');
-            });
-        return defer.promise;
-    }
+    // vm.getFeedbackArray = function() {
+    //     var defer = $q.defer();
+    //     $http.get( 'http://localhost:9000/api/feedbacks' )
+    //         .then(function( feedbacks ) {
+    //             console.log('got my feedbacks',feedbacks);
+    //             vm.feedbackObject = feedbacks;
+    //             console.log( 'Feedbacks Recieved',vm.feedbackObject );
+    //             defer.resolve(feedbacks);
+    //             for( var i in feedbacks ){
+    //                 // looping through feedbacks to delete id and version field
+    //                 delete feedbacks[ i ][ '_id' ];
+    //                 delete feedbacks[ i ][ '__v' ];
+    //             }
+    //             vm.feedbackArray = feedbacks;
+    //             console.log('The final Feedback Array',vm.feedbackArray);
+    //         }, function( error ){
+    //             console.log('Error in fetching feedbacks');
+    //         });
+    //     return defer.promise;
+    // }
      
+
+    $http.get('http://localhost:9000/api/feedbacks').success(function(feedbacks){
+
+        for(var i in feedbacks){
+            delete feedbacks[i]['_id'];
+            delete feedbacks[i]['__v'];
+        }
+        console.log('feedbacks');
+        console.log(feedbacks);
+        vm.feedbackArray = feedbacks;
+    });
+
     // Function returns headers for the feedback excel sheet
     vm.getHeader = function(){
         return ["DemoId", "Name", "Email", "Experience" ,"Comments"];

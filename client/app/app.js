@@ -6,7 +6,7 @@ angular.module('dweAdminApp', [
   'ngResource',
   'ngSanitize',
   'btford.socket-io',
-  
+  'ngCsv',
   'ui.bootstrap',
   'ngFileUpload'
 ])
