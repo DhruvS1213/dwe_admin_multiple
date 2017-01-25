@@ -4,6 +4,7 @@ angular.module('dweAdminApp')
   .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService, uploadDataService, uploadVideoService, uploadImageService, $q) {
     console.log('admin-view');
     
+    
     // Temporary variables
     var vm = this;
     var demourl = appConfig.url + '/server/temp/'
@@ -22,6 +23,7 @@ angular.module('dweAdminApp')
     vm.contents = [];
     vm.images = [];
     vm.imgDescription = [];
+    vm.imgLabel = [];
     vm.videoPath = [];
     vm.accordion=1;
     vm.imgJSON = [];
@@ -32,6 +34,8 @@ angular.module('dweAdminApp')
     vm.feedbackArray = [];
     vm.showLink = 0;
     vm.feedbackLink = '#';
+    vm.feedbackObject={};
+    vm.feedbackObjectDisplay={};
 
     // Removing all the instances attached to CKEDITORS
     angular.element( document ).ready( function () {
@@ -45,10 +49,13 @@ angular.module('dweAdminApp')
 
     // Function to download Feedbacks in a CSV File
     vm.getFeedbackArray = function() {
+        console.log('feedbacks');
         var defer = $q.defer();
-        httpService.getData( '/api/feedbacks' )
+        $http.get( '/api/feedbacks' )
             .then(function( feedbacks ) {
-                console.log( 'Feedbacks Recieved' );
+                console.log('got my feedbacks',feedbacks);
+                vm.feedbackObject = feedbacks;
+                console.log( 'Feedbacks Recieved',vm.feedbackObject );
                 defer.resolve(feedbacks);
                 for( var i in feedbacks ){
                     // looping through feedbacks to delete id and version field
@@ -94,8 +101,9 @@ angular.module('dweAdminApp')
         }
         
         console.log(index);
-        $http.get('/api/contents/'+index).success(function(content){
+        $http.get('/api/contents/'+ index).success(function(content){
             vm.selectedDemoContent = content;
+            console.log(vm.selectedDemoContent);
             vm.selectedDemoId = vm.selectedDemoContent.demoId;
             console.log('selected demo content');
             console.log(vm.selectedDemoContent);
@@ -140,15 +148,29 @@ angular.module('dweAdminApp')
             if(vm.selectedDemoContent.imageDetail === undefined){
                 vm.images = [];
                 vm.imgDescription = [];
+                vm.imgLabel = [];
             }
             else{
                 vm.imgJSON = vm.selectedDemoContent.imageDetail;
                 for(var i in vm.selectedDemoContent.imageDetail){
                     vm.images[i] = vm.imgJSON[i].imagePath;
                     vm.imgDescription[i] = vm.imgJSON[i].imageDescription;
+                    vm.imgLabel[i] = vm.imgJSON[i].label;
                 }
             }
        });
+
+    for(var i=0;i<vm.feedbackObject.data.length;i++)
+       {
+
+            if(vm.feedbackObject.data[i].demoId == index)
+            {
+            console.log('inside if');    
+            vm.feedbackObjectDisplay[i] = vm.feedbackObject.data[i]
+            }
+       }
+
+        console.log('inside get content for feedback',vm.feedbackObjectDisplay);
     }
 
 
@@ -249,6 +271,7 @@ angular.module('dweAdminApp')
                         temp['imagePath'] = demourl + name;
                         temp['id'] = vm.images.length-1;
                         temp['imageDescription'] = '';
+                        temp['label'] = '';
 
                         vm.imgJSON.push(temp);
                         console.log('upload function');
@@ -336,6 +359,7 @@ angular.module('dweAdminApp')
 
     vm.addDescription = function(description, index){
         vm.imgJSON= vm.selectedDemoContent.imageDetail;
+        console.log(vm.selectedDemoContent.imageDetail);
         for(var i=0; i<vm.imgJSON.length; i++) {
             console.log('Searching if ID Exists');
             flag=0;
@@ -355,6 +379,29 @@ angular.module('dweAdminApp')
         updateImageContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );
     }
 
+
+
+    vm.addLabel = function(label, index){
+        vm.imgJSON= vm.selectedDemoContent.imageDetail;
+        for(var i=0; i<vm.imgJSON.length; i++) {
+            console.log('Searching if ID Exists');
+            flag=0;
+            console.log(vm.imgJSON[i].id);
+            if(vm.imgJSON[i].id == index)
+            {
+                flag=1;
+                console.log('i',i);
+                console.log('id', index);
+                console.log('ID Exists');
+                vm.imgJSON[i].label = label;
+                break;
+            }
+        }
+        requestParams.imageDetail = vm.imgJSON;
+        console.log('json-length', vm.imgJSON);
+        updateImageContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );
+    }
+
     vm.removeImage = function(index){
         console.log('image requrest to delete')
         console.log(index);
@@ -363,6 +410,7 @@ angular.module('dweAdminApp')
         vm.imgJSON.splice(index,1);
         vm.images.splice(index,1);
         vm.imgDescription.splice(index,1);
+        vm.imgLabel.splice(index,1);
         console.log(vm.imgJSON);
         for(var i=index ;i<vm.imgJSON.length; i++){
             vm.imgJSON[i].id  = vm.imgJSON[i].id - 1 ;
@@ -392,7 +440,9 @@ angular.module('dweAdminApp')
         vm.images = [];
         vm.imgJSON = [];
         vm.imgDescription = [];
+        vm.imgLabel = [];
         vm.videoPath = [];
+        vm.feedbackObjectDisplay={};
     }
 
     function getContents() {
@@ -408,6 +458,12 @@ angular.module('dweAdminApp')
            }, function( error ){
                 console.log( 'error in fetching contents' );
         });
+
+     $http.get( '/api/feedbacks' )
+            .then(function( feedbacks ) {
+                vm.feedbackObject = feedbacks;
+                console.log('content feedback',vm.feedbackObject);
+            }); 
     }
 
     function updateBlogData ( requestUrl, contentId, blogEntry, requestParams ) {

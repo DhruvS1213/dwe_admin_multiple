@@ -146,6 +146,8 @@
                                 </div>
                                 <textarea ng-model = "up.imgDescription[$index]"></textarea>
                                 <button ng-click="up.addDescription(up.imgDescription[$index], $index)">Upload Description</button>
+                                 <textarea ng-model = "up.imgLabel[$index]"></textarea>
+                                <button ng-click="up.addLabel(up.imgLabel[$index], $index)">Upload Label</button>
                             </div>
                         </div>
                     </div>
@@ -202,6 +204,26 @@
                 </accordion-group>
                 <!-- Video Accordian ends here-->
             
+                <accordion-group>
+                    <accordion-heading>  
+
+                    <div class="acc-heading">
+                        Feedbacks
+                    </div>
+                    
+                    </accordion-heading>
+                  
+                    <div ng-repeat="feed in up.feedbackObjectDisplay track by $index">
+
+                      <div>Name :  {{feed.userName}}</div>
+                      <div>Email : {{feed.email}}</div>
+                      <div>Experience : {{feed.experience}} </div>
+                      <div>Comments : {{feed.comments}}</div>
+                      <hr />
+                    </div>
+
+                </accordion-group>
+
             </accordian>
         
             <div class="submit-button">
@@ -213,7 +235,7 @@
 
         <footer class="footer">
             <div class="container">
-                <button class="downloadbutton-style" ng-csv = "up.getFeedbackArray()" filename = "feedbacks.csv" csv-header = "up.getHeader()"> Download Feedbacks </button>
+                <button class="downloadbutton-style" ng-csv = "up.getFeedbackArray()" ng-click = "up.getFeedbackArray()" filename = "feedbacks.csv" csv-header = "up.getHeader()"> Download Feedbacks </button>
             </div>
         </footer>
 

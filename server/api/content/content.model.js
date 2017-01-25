@@ -12,7 +12,8 @@ var ContentSchema = new Schema({
     {
       id: Number,
       imagePath: String,
-      imageDescription: String
+      imageDescription: String,
+      label:String
     }
   ],
   active: Boolean
