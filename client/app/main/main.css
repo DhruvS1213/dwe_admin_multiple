@@ -225,3 +225,14 @@ ul {
     border-radius: 4px;
     border: none;
 }
+
+.feedbackLabelText{
+        font-weight: bold;
+
+    font-size: 15px;
+
+}
+
+.feedbackText{
+    font-weight: normal !important
+}

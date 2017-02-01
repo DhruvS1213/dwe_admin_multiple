@@ -13,7 +13,8 @@ var ContentSchema = new Schema({
       id: Number,
       imagePath: String,
       imageDescription: String,
-      label:String
+      label:String,
+      subImages: Array
     }
   ],
   active: Boolean

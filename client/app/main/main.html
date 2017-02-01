@@ -142,12 +142,45 @@
                                     <img ng-src="{{image}}" height="100px" width="100px" />
                                     <button type = "button" class = "btn btn-danger btn-transparent" ng-click="up.removeImage($index)"><span class="glyphicon glyphicon-remove"></span></button>
                                     
-                                    
                                 </div>
+                                <div style="display: inline">
                                 <textarea ng-model = "up.imgDescription[$index]"></textarea>
-                                <button ng-click="up.addDescription(up.imgDescription[$index], $index)">Upload Description</button>
-                                 <textarea ng-model = "up.imgLabel[$index]"></textarea>
-                                <button ng-click="up.addLabel(up.imgLabel[$index], $index)">Upload Label</button>
+                                <button style="position: relative;top: -10px;" ng-click="up.addDescription(up.imgDescription[$index], $index)">Upload Description</button>
+                                </div>
+                                <div style="position: relative;left: 12.9%;margin-top: -5%;">
+                                <textarea ng-model = "up.imgLabel[$index]"></textarea>
+                                <button style="position: relative;top: -10px;" ng-click="up.addLabel(up.imgLabel[$index], $index)">Upload Label</button>
+                                </div>
+                                <div class="instructionImageSection">
+                                    <form name="up.subImage_form">
+                                        <label> Add Sub Images </label>
+                                        <input
+                                            type="file"
+                                            ngf-select
+                                            ng-model="up.subFile"
+                                            name="subFile"
+                                            ngf-pattern="'image/*'"
+                                            accept="image/*"
+                                            ngf-max-size="20MB"
+                                            />
+                                        <div>
+                                          <button type = "button" class = "btn btn-primary" ng-click="up.uploadSubImage($index)" >Upload Sub-Image</button>
+                                        </div>
+                                    </form>
+                                    <div class="subImagesSection" ng-repeat="subImage in up.subImages[$index]">
+                                        <img ng-src="{{subImage.subImgPath}}" height="50px" width="50px" />
+                                        <button type ="button" class="btn btn-danger btn-transparent"><span class="glyphicon glyphicon-remove"></span></button>
+                                        <div style="display: inline">
+                                            <textarea ng-model = "up.subImageDescription[$parent.$index][$index]"></textarea>
+                                            <button style="position: relative;top: -10px;" ng-click="up.addSubImageDetails(1, up.subImageDescription[$parent.$index][$index], $parent.$index, $index)">Upload Description</button>
+                                        </div>
+                                        <div style="position: relative;left: 12.9%;margin-top: -5%;">
+                                            <textarea ng-model = "up.subImgLabel[$parent.$index][$index]"></textarea>
+                                            <button style="position: relative;top: -10px;" ng-click="up.addSubImageDetails(0, up.subImgLabel[$parent.$index][$index], $parent.$index, $index)">Upload Label</button>
+                                        </div>
+                                    </div>
+
+                                </div>  
                             </div>
                         </div>
                     </div>
@@ -215,10 +248,10 @@
                   
                     <div ng-repeat="feed in up.feedbackObjectDisplay track by $index">
 
-                      <div>Name :  {{feed.userName}}</div>
-                      <div>Email : {{feed.email}}</div>
-                      <div>Experience : {{feed.experience}} </div>
-                      <div>Comments : {{feed.comments}}</div>
+                      <div class="feedbackLabelText">Name : <span class="feedbackText">{{feed.userName}}</span></div>
+                      <div class="feedbackLabelText">Email :<span class="feedbackText"> {{feed.email}} </span></div>
+                      <div class="feedbackLabelText">Experience :<span class="feedbackText"> {{feed.experience}} </span></div>
+                      <div class="feedbackLabelText">Comments : <span class="feedbackText">{{feed.comments}} </span></div>
                       <hr />
                     </div>
 

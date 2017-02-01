@@ -22,11 +22,15 @@ angular.module('dweAdminApp')
     vm.selectedBlogId = 0;
     vm.contents = [];
     vm.images = [];
+    vm.subImages = {};
     vm.imgDescription = [];
+    vm.subImageDescription = [[]];
+    vm.subImgLabel = [];
     vm.imgLabel = [];
     vm.videoPath = [];
     vm.accordion=1;
     vm.imgJSON = [];
+    vm.subImgJSON = [];
     vm.demos = [];
     vm.selectedDemoContent = [];
     vm.showContentDiv = false;
@@ -152,22 +156,41 @@ angular.module('dweAdminApp')
             }
             else{
                 var me = vm.selectedDemoContent.videoContent.split(",");
-                vm.videoPath= me;
+                vm.videoPath = me;
+                console.log("this is the videoPath",vm.videoPath);
             }
 
             // Checking whether image content is added or not
             if(vm.selectedDemoContent.imageDetail === undefined){
                 vm.images = [];
                 vm.imgDescription = [];
+                vm.subImageDescription = [];
+                vm.subImgLabel = [];
                 vm.imgLabel = [];
             }
             else{
                 vm.imgJSON = vm.selectedDemoContent.imageDetail;
+
                 for(var i in vm.selectedDemoContent.imageDetail){
                     vm.images[i] = vm.imgJSON[i].imagePath;
+                    vm.subImages[i] = vm.imgJSON[i].subImages;
+                    
                     vm.imgDescription[i] = vm.imgJSON[i].imageDescription;
+
                     vm.imgLabel[i] = vm.imgJSON[i].label;
                 }
+                for(var i in vm.subImages){
+                    for(vm.subImageDescription[i] = [];vm.subImageDescription.length < vm.subImages.length; vm.subImageDescription.push([]));
+                    for(vm.subImgLabel[i] = [];vm.subImgLabel.length < vm.subImages.length; vm.subImgLabel.push([]));
+                    for (var j in vm.subImages[i]){
+                        // console.log(i);
+                        console.log(i,',',j);
+                        console.log(vm.subImages[i][j].subImageDescription);
+                        vm.subImageDescription[i][j] = vm.subImages[i][j].subImageDescription;
+                        vm.subImgLabel[i][j] = vm.subImages[i][j].subImageLabel
+                    }
+                }
+
             }
        });
 
@@ -260,7 +283,17 @@ angular.module('dweAdminApp')
         }
     };
 
-    vm.upload = function(file, contentType){
+    vm.uploadSubImage = function(imageNumber){
+        console.log('uyploadSubImage Request');
+        if(vm.subFile){
+            console.log('valid');
+            console.log('imageNumber', imageNumber, vm.subFile);
+            vm.upload(vm.subFile, 3, imageNumber)
+        }
+    }
+
+   
+    vm.upload = function(file, contentType, imageNumber){
         var contentId;
         Upload.upload({
             url: '/api/contents/imageFile', 
@@ -271,8 +304,56 @@ angular.module('dweAdminApp')
                     console.log(resp.config.data.file.name);
                     $window.alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
                 
-                    if(contentType === 1)
-                    {
+
+                    if(contentType === 3) {
+                        name = resp.config.data.file.name;
+                        console.log(demourl + name);
+                        vm.subImages.push(demourl + name);
+                        var tempSubImage = {};
+                        tempSubImage['subImgPath'] = demourl + name;
+                        tempSubImage['imageNumber'] = imageNumber;
+                        tempSubImage['subImageDescription'] = '';
+                        tempSubImage['subImageLabel'] = '';
+
+                        // vm.subImgJSON.push(tempSubImage);
+                        for( var i=0;i<vm.imgJSON.length; i++ ) {
+                            if(vm.imgJSON[i].id === imageNumber){
+                                if(typeof(vm.imgJSON[i].subImages) === 'undefined'){vm.subImgJSON = [];}
+                                else{vm.subImgJSON = vm.imgJSON[i].subImages;}
+                                vm.subImgJSON.push(tempSubImage);
+
+                                vm.imgJSON[i].subImages = vm.subImgJSON;
+                                console.log(vm.imgJSON[i]);
+                                break;
+                            }
+                        }
+
+                        var blogTitle = CKEDITOR.instances.blogTitle.getData();
+                        var blogData = CKEDITOR.instances.blogData.getData();
+                        requestParams.demoId = tempId;
+                        requestParams.imageDetail = vm.imgJSON;
+
+                        if(blogTitle === '' && blogData === '' && vm.videoPath.length === 0 && addOrUpdate === 0) {
+                            console.log( ' image post request' );
+                            uploadImageService.postImageDetail ( '/api/contents', requestParams ) 
+                                .then( function ( resp ) {
+                                    console.log( 'Image uploaded successfully' );
+                                    console.log( resp );
+                                }, function ( error ) {
+                                    console.log( 'error in uploading image' );
+                                });
+                            getContents();
+                        }
+
+                        else{
+                            if (addOrUpdate === 0) { contentId = vm.contents[tempId - 1]._id; }
+                            if (addOrUpdate === 1) { contentId = vm.selectedDemoContent._id; }
+                            updateImageContent('/api/contents/', contentId, requestParams);
+                        }
+
+                        // console.log(vm.subImgJSON);
+                    }
+                    if(contentType === 1){
                         name = resp.config.data.file.name;
                         console.log(demourl + name);
                         vm.images.push(demourl+name);
@@ -392,6 +473,28 @@ angular.module('dweAdminApp')
 
 
 
+    vm.addSubImageDetails = function(labelOrDescription, content, imageIndex, subImageIndex){
+        vm.imgJSON= vm.selectedDemoContent.imageDetail;
+
+        for(var i=0;i<vm.imgJSON.length; i++){
+            if(vm.imgJSON[i].id === imageIndex){
+                if(labelOrDescription == 0){
+                    vm.imgJSON[i].subImages[subImageIndex].subImageLabel = content;        
+                }
+                else{
+                    vm.imgJSON[i].subImages[subImageIndex].subImageDescription = content;    
+                }
+                
+                break;
+            }
+        }
+        requestParams.imageDetail = vm.imgJSON;
+        console.log('json-length', vm.imgJSON); 
+        updateImageContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );   
+    }
+
+
+
     vm.addLabel = function(label, index){
         vm.imgJSON= vm.selectedDemoContent.imageDetail;
         for(var i=0; i<vm.imgJSON.length; i++) {
@@ -436,7 +539,8 @@ angular.module('dweAdminApp')
     vm.removeVideo = function(index){
         console.log('video delete request made');
         console.log(index);
-        vm.videoPath = vm.selectedDemoContent.videoContent;
+        console.log("remove video",vm.selectedDemoContent.videoContent);
+        vm.videoPath = vm.selectedDemoContent.videoContent.split(",");
         vm.videoPath.splice(index,1);
         console.log(vm.videoPath)
         requestParams.videoContent = vm.videoPath;
@@ -451,6 +555,8 @@ angular.module('dweAdminApp')
         vm.images = [];
         vm.imgJSON = [];
         vm.imgDescription = [];
+        vm.subImageDescription = [];
+        vm.subImageLabel = [];
         vm.imgLabel = [];
         vm.videoPath = [];
         vm.feedbackObjectDisplay={};
