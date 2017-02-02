@@ -22,10 +22,10 @@ angular.module('dweAdminApp')
     vm.selectedBlogId = 0;
     vm.contents = [];
     vm.images = [];
-    vm.subImages = {};
+    vm.subImages = [];
     vm.imgDescription = [];
     vm.subImageDescription = [[]];
-    vm.subImgLabel = [];
+    vm.subImageLabel = [];
     vm.imgLabel = [];
     vm.videoPath = [];
     vm.accordion=1;
@@ -181,13 +181,13 @@ angular.module('dweAdminApp')
                 }
                 for(var i in vm.subImages){
                     for(vm.subImageDescription[i] = [];vm.subImageDescription.length < vm.subImages.length; vm.subImageDescription.push([]));
-                    for(vm.subImgLabel[i] = [];vm.subImgLabel.length < vm.subImages.length; vm.subImgLabel.push([]));
+                    for(vm.subImageLabel[i] = [];vm.subImageLabel.length < vm.subImages.length; vm.subImageLabel.push([]));
                     for (var j in vm.subImages[i]){
                         // console.log(i);
                         console.log(i,',',j);
                         console.log(vm.subImages[i][j].subImageDescription);
                         vm.subImageDescription[i][j] = vm.subImages[i][j].subImageDescription;
-                        vm.subImgLabel[i][j] = vm.subImages[i][j].subImageLabel
+                        vm.subImageLabel[i][j] = vm.subImages[i][j].subImageLabel
                     }
                 }
 
@@ -514,6 +514,25 @@ angular.module('dweAdminApp')
         requestParams.imageDetail = vm.imgJSON;
         console.log('json-length', vm.imgJSON);
         updateImageContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );
+    }
+
+    vm.removeSubImage = function(imageIndex, index){
+        vm.imgJSON = vm.selectedDemoContent.imageDetail;
+        var temp = [];
+        for(var i=0;i<vm.imgJSON.length; i++){
+            if(vm.imgJSON[i].id === imageIndex) {                
+                vm.imgJSON[i].subImages.splice(index, 1);
+                vm.subImageDescription[i].splice(index,1);
+                vm.subImageLabel[i].splice(index, 1);
+                console.log(vm.imgJSON[i].subImages);
+                break;
+            }
+        }
+        
+        requestParams.imageDetail = vm.imgJSON;
+        console.log('json-length', vm.imgJSON);
+        updateImageContent( '/api/contents/', vm.selectedDemoContent._id, requestParams );
+
     }
 
     vm.removeImage = function(index){

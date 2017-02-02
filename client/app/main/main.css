@@ -236,3 +236,10 @@ ul {
 .feedbackText{
     font-weight: normal !important
 }
+
+
+.subImageDiv{
+    margin-left: 6%;
+    border: 1px solid black;
+    padding: 2%;
+}

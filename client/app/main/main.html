@@ -135,7 +135,7 @@
                             </div>
                             
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8" style="margin-left: -10%;">
                             <div ng-repeat="image in up.images track by $index">
                                 <br>
                                 <div class="img-content">
@@ -151,7 +151,7 @@
                                 <textarea ng-model = "up.imgLabel[$index]"></textarea>
                                 <button style="position: relative;top: -10px;" ng-click="up.addLabel(up.imgLabel[$index], $index)">Upload Label</button>
                                 </div>
-                                <div class="instructionImageSection">
+                                <div class="subImageDiv" >
                                     <form name="up.subImage_form">
                                         <label> Add Sub Images </label>
                                         <input
@@ -164,19 +164,28 @@
                                             ngf-max-size="20MB"
                                             />
                                         <div>
+                                        <br />
                                           <button type = "button" class = "btn btn-primary" ng-click="up.uploadSubImage($index)" >Upload Sub-Image</button>
                                         </div>
                                     </form>
+                                    <br />
                                     <div class="subImagesSection" ng-repeat="subImage in up.subImages[$index]">
-                                        <img ng-src="{{subImage.subImgPath}}" height="50px" width="50px" />
-                                        <button type ="button" class="btn btn-danger btn-transparent"><span class="glyphicon glyphicon-remove"></span></button>
+                                   <!--      <img ng-src="{{subImage.subImgPath}}" height="50px" width="50px" />
+                                        <button type ="button" ng-click="up.removeSubImage($parent.$index, $index)" class="btn btn-danger btn-transparent"><span class="glyphicon glyphicon-remove"></span></button> -->
+
+                                           <div class="img-content">
+                                                <img ng-src="{{subImage.subImgPath}}" height="100px" width="100px" />
+                                                <button type = "button" class = "btn btn-danger btn-transparent" ng-click="up.removeSubImage($parent.$index, $index)"><span class="glyphicon glyphicon-remove"></span></button>
+                                    
+                                         </div>
+
                                         <div style="display: inline">
                                             <textarea ng-model = "up.subImageDescription[$parent.$index][$index]"></textarea>
                                             <button style="position: relative;top: -10px;" ng-click="up.addSubImageDetails(1, up.subImageDescription[$parent.$index][$index], $parent.$index, $index)">Upload Description</button>
                                         </div>
-                                        <div style="position: relative;left: 12.9%;margin-top: -5%;">
-                                            <textarea ng-model = "up.subImgLabel[$parent.$index][$index]"></textarea>
-                                            <button style="position: relative;top: -10px;" ng-click="up.addSubImageDetails(0, up.subImgLabel[$parent.$index][$index], $parent.$index, $index)">Upload Label</button>
+                                        <div style="position: relative;left: 14.4%;margin-top: -5%;">
+                                            <textarea ng-model = "up.subImageLabel[$parent.$index][$index]"></textarea>
+                                            <button style="position: relative;top: -10px;" ng-click="up.addSubImageDetails(0, up.subImageLabel[$parent.$index][$index], $parent.$index, $index)">Upload Label</button>
                                         </div>
                                     </div>
 
