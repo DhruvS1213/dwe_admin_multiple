@@ -7,6 +7,9 @@ var troubleTicketSchema = new Schema({
   demoId: Number,
   userName: String,
   comments: String,
+  issue: String,
+  functionality : String,
+  dateTime : String,
   active: Boolean
 });
 

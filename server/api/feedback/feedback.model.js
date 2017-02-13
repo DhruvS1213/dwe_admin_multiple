@@ -5,10 +5,11 @@ var mongoose = require('mongoose'),
 
 var FeedbackSchema = new Schema({
   demoId: Number,
-  userName: String,
-  email: String,
+  feedbackType: String,
+  functionality: String,
   comments: String,
   experience: String,
+  dateTime: String,
   active: Boolean
 });
 

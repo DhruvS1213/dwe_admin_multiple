@@ -14,13 +14,13 @@
         
         <!-- This button appears at center when no blog is added -->
         <div ng-if = "up.contents.length === 0" class="add-btn-div">
-            <button class = "btn btn-success btn-lg add-btn" ng-click="up.addNewBlog()"> + Add Blog </button>
+            <button class = "btn btn-success btn-lg add-btn" ng-click="up.addNewBlog()"> + Add App </button>
         </div>
         <br />
 
         <!-- This button appears on right side when blogs exist -->
         <div ng-if = "up.contents.length > 0">
-            <button class = "btn btn-success btn-lg add-new-btn" ng-click="up.addNewBlog()"> + Add New Blog </button>
+            <button class = "btn btn-success btn-lg add-new-btn" ng-click="up.addNewBlog()"> + Add New App </button>
         </div>
 
     
@@ -250,21 +250,41 @@
                     <accordion-heading>  
 
                     <div class="acc-heading">
-                        Feedbacks
+                        Feedback
                     </div>
                     
                     </accordion-heading>
                   
                     <div ng-repeat="feed in up.feedbackObjectDisplay track by $index">
 
-                      <div class="feedbackLabelText">Name : <span class="feedbackText">{{feed.userName}}</span></div>
-                      <div class="feedbackLabelText">Email :<span class="feedbackText"> {{feed.email}} </span></div>
                       <div class="feedbackLabelText">Experience :<span class="feedbackText"> {{feed.experience}} </span></div>
                       <div class="feedbackLabelText">Comments : <span class="feedbackText">{{feed.comments}} </span></div>
+                      <div class="feedbackLabelText">Date and Time : <span class="feedbackText">{{feed.dateTime}} </span></div>
                       <hr />
                     </div>
 
                 </accordion-group>
+
+            <accordion-group>
+                    <accordion-heading>  
+
+                    <div class="acc-heading">
+                        Trouble Ticket
+                    </div>
+                    
+                    </accordion-heading>
+                  
+                    <div ng-repeat="trouble in up.troubleObjectDisplay track by $index">
+
+                      <div class="feedbackLabelText">Issue :<span class="feedbackText"> {{trouble.issue}} </span></div>
+                      <div class="feedbackLabelText" ng-if="trouble.functionality.length > 0">Functionality : <span class="feedbackText">{{trouble.functionality}} </span></div>
+                      <div class="feedbackLabelText">Details : <span class="feedbackText">{{trouble.comments}} </span></div>
+                      <div class="feedbackLabelText">Date and Time : <span class="feedbackText">{{trouble.dateTime}} </span></div>
+                      <hr />
+                    </div>
+
+                </accordion-group>
+
 
             </accordian>
         

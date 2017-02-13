@@ -40,7 +40,8 @@ angular.module('dweAdminApp')
     vm.feedbackLink = '#';
     vm.feedbackObject={};
     vm.feedbackObjectDisplay={};
-
+    vm.troubleObject={};
+    vm.troubleObjectDisplay={};
     // Removing all the instances attached to CKEDITORS
     angular.element( document ).ready( function () {
         console.log( 'On Page Refresh' );
@@ -87,7 +88,7 @@ angular.module('dweAdminApp')
 
     // Function returns headers for the feedback excel sheet
     vm.getHeader = function(){
-        return ["DemoId", "Name", "Email", "Experience" ,"Comments"];
+        return ["DemoId", "Feedback Type", "Functionality", "Experience" ,"Comments","TimeStamp"];
     }
 
     vm.htmlToPlaintext = function( text ) {
@@ -205,7 +206,26 @@ angular.module('dweAdminApp')
        }
 
         console.log('inside get content for feedback',vm.feedbackObjectDisplay);
+
+
+
+   for(var i=0;i<vm.troubleObject.data.length;i++)
+       {
+
+            if(vm.troubleObject.data[i].demoId == index)
+            {
+            console.log('inside if');    
+            vm.troubleObjectDisplay[i] = vm.troubleObject.data[i];
+            }
+       }
+
+        console.log('inside get content for troubleTIcket',vm.troubleObjectDisplay);
+
     }
+
+
+    
+
 
 
     vm.submitBlog = function(){
@@ -600,7 +620,14 @@ angular.module('dweAdminApp')
                 vm.feedbackObject = feedbacks;
                 console.log('content feedback',vm.feedbackObject);
             }); 
+
+     $http.get( '/api/troubleTickets' )
+            .then(function( troubleTickets ) {
+                vm.troubleObject = troubleTickets;
+                console.log('content trouble',vm.troubleObject);
+            }); 
     }
+
 
     function updateBlogData ( requestUrl, contentId, blogEntry, requestParams ) {
         uploadDataService.updateContentData( requestUrl, contentId, blogEntry, requestParams )
