@@ -263,6 +263,10 @@
                       <hr />
                     </div>
 
+                       <div class="container">
+                            <button class="downloadbutton-style" ng-csv = "up.feedbackArray" filename = "feedbacks.csv" csv-header = "up.getHeader()"> Download Feedbacks </button>
+                        </div>
+
                 </accordion-group>
 
             <accordion-group>
@@ -283,6 +287,10 @@
                       <hr />
                     </div>
 
+                     <div class="container">
+                            <button class="downloadbutton-style" ng-csv = "up.troubleArray" filename = "troubleTicket.csv" csv-header = "up.getHeaderTrouble()"> Download Trouble Tickets </button>
+                    </div>
+
                 </accordion-group>
 
 
@@ -296,9 +304,7 @@
   
 
         <footer class="footer">
-            <div class="container">
-                               <button class="downloadbutton-style" ng-csv = "up.feedbackArray" filename = "feedbacks.csv" csv-header = "up.getHeader()" field-separator=";"> Download Feedbacks </button>
-            </div>
+         
         </footer>
 
     </div>

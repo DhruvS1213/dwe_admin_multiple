@@ -36,6 +36,7 @@ angular.module('dweAdminApp')
     vm.showContentDiv = false;
     vm.showSelectionDiv = true;
     vm.feedbackArray = [];
+    vm.troubleArray = [];
     vm.showLink = 0;
     vm.feedbackLink = '#';
     vm.feedbackObject={};
@@ -90,6 +91,24 @@ angular.module('dweAdminApp')
     vm.getHeader = function(){
         return ["DemoId", "Feedback Type", "Functionality", "Experience" ,"Comments","TimeStamp"];
     }
+
+     $http.get('http://localhost:9000/api/troubleTickets').success(function(troubleTickets){
+
+        for(var i in troubleTickets){
+            delete troubleTickets[i]['_id'];
+            delete troubleTickets[i]['__v'];
+        }
+        console.log('troubleTickets');
+        console.log(troubleTickets);
+        vm.troubleArray = troubleTickets;
+    });
+
+    // Function returns headers for the feedback excel sheet
+    vm.getHeaderTrouble = function(){
+        return ["DemoId", "Issue", "Functionality" ,"Comments","Time Stamp"];
+    }
+
+
 
     vm.htmlToPlaintext = function( text ) {
         return text ? String( text ).replace( /<[^>]+>/gm, '' ) : '';
