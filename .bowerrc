@@ -1,6 +1,4 @@
 {
-   "proxy":"http://1116411:Smart!006@proxy.tcs.com:8080",
-"https-proxy":"http://1116411:Smart!006@proxy.tcs.com:8080",
-"strict-ssl": false,
+
     "directory": "client/bower_components"
 }
