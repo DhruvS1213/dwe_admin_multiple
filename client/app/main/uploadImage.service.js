@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('dweAdminApp')
-    .factory('uploadImageService', ['$http', '$q', 
-        function ($http, $q) {
-            var baseUrl = 'http://localhost:9000';
+    .factory('uploadImageService', ['$http', '$q', 'appConfig',
+        function ($http, $q, appConfig) {
+            var baseUrl = appConfig.url
             var uploadImageService = {
                 dataRetrieved : [],
                 postImageDetail : postImageDetail,

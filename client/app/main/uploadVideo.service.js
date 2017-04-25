@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('dweAdminApp')
-    .factory('uploadVideoService', ['$http', '$q', 
-        function ($http, $q) {
+    .factory('uploadVideoService', ['$http', '$q', 'appConfig',
+        function ($http, $q, appConfig) {
         
-            var baseUrl = 'http://localhost:9000';
+            var baseUrl = appConfig.url;
             var uploadVideo = {
                 dataRetrieved : [],
                 postVideo : postVideo,

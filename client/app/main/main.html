@@ -133,7 +133,6 @@
                             <div>
                                 <button type = "button" class = "btn btn-primary" ng-click="up.submit(1)" >Upload Image</button>
                             </div>
-                            
                         </div>
                         <div class="col-md-8" style="margin-left: -10%;">
                             <div ng-repeat="image in up.images track by $index">
@@ -144,10 +143,10 @@
                                     
                                 </div>
                                 <div style="display: inline">
-                                <textarea ng-model = "up.imgDescription[$index]"></textarea>
-                                <button style="position: relative;top: -10px;" ng-click="up.addDescription(up.imgDescription[$index], $index)">Upload Description</button>
+                                <textarea ng-model = "up.imgDescription[$index]" ck-editor></textarea>
+                                <button style="position: relative;top: 10px;" ng-click="up.addDescription(up.imgDescription[$index], $index)">Upload Description</button>
                                 </div>
-                                <div style="position: relative;left: 12.9%;margin-top: -5%;">
+                                <div style="position: relative;left: -0.1%;margin-top: 3%;">
                                 <textarea ng-model = "up.imgLabel[$index]"></textarea>
                                 <button style="position: relative;top: -10px;" ng-click="up.addLabel(up.imgLabel[$index], $index)">Upload Label</button>
                                 </div>
@@ -180,10 +179,10 @@
                                          </div>
 
                                         <div style="display: inline">
-                                            <textarea ng-model = "up.subImageDescription[$parent.$index][$index]"></textarea>
-                                            <button style="position: relative;top: -10px;" ng-click="up.addSubImageDetails(1, up.subImageDescription[$parent.$index][$index], $parent.$index, $index)">Upload Description</button>
+                                            <textarea ng-model = "up.subImageDescription[$parent.$index][$index]" ck-editor></textarea>
+                                            <button style="position: relative;top: 10px;" ng-click="up.addSubImageDetails(1, up.subImageDescription[$parent.$index][$index], $parent.$index, $index)">Upload Description</button>
                                         </div>
-                                        <div style="position: relative;left: 14.4%;margin-top: -5%;">
+                                        <div style="    position: relative;left: 0%;margin-top: 5%">
                                             <textarea ng-model = "up.subImageLabel[$parent.$index][$index]"></textarea>
                                             <button style="position: relative;top: -10px;" ng-click="up.addSubImageDetails(0, up.subImageLabel[$parent.$index][$index], $parent.$index, $index)">Upload Label</button>
                                         </div>

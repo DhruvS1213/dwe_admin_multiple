@@ -12,7 +12,7 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var Content = require('./content.model');
-var url = 'http://localhost:9000';
+var url = 'http://10.29.24.213:9000';
 // var sendgrid = require("sendgrid")("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");
 var Sendgrid = require("sendgrid-web");
 

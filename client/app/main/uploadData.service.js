@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('dweAdminApp')
-    .factory('uploadDataService', ['$http', '$q', 
-        function ($http, $q) {
+    .factory('uploadDataService', ['$http', '$q', 'appConfig', 
+        function ($http, $q, appConfig) {
         
-            var baseUrl = 'http://localhost:9000';
+            var baseUrl = appConfig.url;
             var dataService = {
                 dataRetrieved : [],
                 getData: getData,

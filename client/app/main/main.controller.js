@@ -3,11 +3,12 @@
 angular.module('dweAdminApp')
   .controller('MainCtrl', function ($scope, $http, socket, Auth, Upload, $window, appConfig, httpService, uploadDataService, uploadVideoService, uploadImageService, $q) {
     console.log('admin-view');
-    
+    console.log(CKEDITOR.instances.imageDescription);
 
     // Temporary variables
     var vm = this;
     var demourl = appConfig.url + '/server/temp/'
+    var demourl_feedbacks = appConfig.url;
     var tempId;
     var flag=0;
     var addOrUpdate = 0;      //flag to know if content is being added or updated. 0: Adding Content; 1: Updating Content
@@ -76,7 +77,7 @@ angular.module('dweAdminApp')
     // }
      
 
-    $http.get('http://localhost:9000/api/feedbacks').success(function(feedbacks){
+    $http.get(demourl_feedbacks + '/api/feedbacks').success(function(feedbacks){
 
         for(var i in feedbacks){
             delete feedbacks[i]['_id'];
@@ -92,7 +93,7 @@ angular.module('dweAdminApp')
         return ["DemoId", "Feedback Type", "Functionality", "Experience" ,"Comments","TimeStamp"];
     }
 
-     $http.get('http://localhost:9000/api/troubleTickets').success(function(troubleTickets){
+     $http.get(demourl_feedbacks+'/api/troubleTickets').success(function(troubleTickets){
 
         for(var i in troubleTickets){
             delete troubleTickets[i]['_id'];
@@ -678,3 +679,23 @@ angular.module('dweAdminApp')
             });
     }
 })
+
+.directive('ckEditor', [function () {
+    return {
+        require: '?ngModel',
+        link: function ($scope, elm, attr, ngModel) {
+
+            var ck = CKEDITOR.replace(elm[0]);
+
+            ck.on('pasteState', function () {
+                $scope.$apply(function () {
+                    ngModel.$setViewValue(ck.getData());
+                });
+            });
+
+            ngModel.$render = function (value) {
+                ck.setData(ngModel.$modelValue);
+            };
+        }
+    };
+}])
