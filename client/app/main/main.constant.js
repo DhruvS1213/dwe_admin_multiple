@@ -3,5 +3,5 @@
 angular
     .module('dweAdminApp')
         .constant("appConfig", {
-            "url" : "http://10.29.24.213:9000"
+            "url" : "http://localhost:9000"
         });

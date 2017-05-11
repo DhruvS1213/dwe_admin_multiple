@@ -1,0 +1,34 @@
+.downloads_segment{
+    border: 1px solid black;
+    margin: 30px;
+}
+
+.downloads_title{
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.downloads_content{
+    margin-left: 150px
+}
+
+.download_items{
+    list-style: none;
+    
+}
+
+.download_items > li{
+    padding: 10px;
+    font-size: 1.2em;
+}
+
+.app_name{
+    font-weight: 700;
+    margin-left: 20px;
+}
+
+.app_link{
+    
+}

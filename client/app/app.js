@@ -14,6 +14,21 @@ angular.module('dweAdminApp', [
     $urlRouterProvider
       .otherwise('/');
 
+    $stateProvider
+      .state('main', {
+        url: '/main',
+        templateUrl: 'app/main/main.html',
+        controller: 'MainCtrl as up'
+      })
+      .state('downloads', {
+        url: '/downloads',
+        templateUrl: 'app/downloads/downloads.html',
+        controller: 'DownloadCtrl'
+      });
+    
+      
+      
+
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
