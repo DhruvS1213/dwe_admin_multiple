@@ -5,6 +5,10 @@ angular.module('dweAdminApp')
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
+    },
+    {
+      'title': 'Downloads Page',
+      'link': '/downloads'
     }];
 
     $scope.isCollapsed = true;

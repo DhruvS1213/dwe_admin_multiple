@@ -1,0 +1,24 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+    <header class="hero-unit" id="banner">
+    <div class="container">
+        <div>
+            <img style="z-index:3;height:50px;width:160px;margin-left: 10px;" src="assets/images/erricson.png" />
+        </div>
+    </div>
+    </header>
+
+<div ng-controller="DownloadCtrl as download">
+    <div class="downloads_segment">
+        <div>
+            <p class="downloads_title">Downloads Page</p>
+        </div>  
+
+        <div class="downloads_content">
+            <ul ng-repeat="app in download.apps" class="download_items">
+                <li>App Name: <span class="app_name">{{app.name}}</span><span class="app_link"><a ng-href="{{app.link}}"> {{app.link}}</a></span></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
